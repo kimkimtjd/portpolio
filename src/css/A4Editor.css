@@ -1,0 +1,18 @@
+.a4-page {
+  width: 794px;   /* A4 가로(px, 96dpi 기준) */
+  height: 1122px; /* A4 세로(px) */
+  margin: 20px auto;
+  padding: 40px;
+  border: 1px solid #ccc;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+/* 테이블 셀 리사이저 스타일 */
+.resizer {
+  background: transparent;
+}
+.resizer:hover {
+  background: #007bff;
+}
