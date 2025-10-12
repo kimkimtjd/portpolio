@@ -1,136 +1,515 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FlexColumnAllCenter, FlexColumnCenterStart, FlexColumnStartCenter, FlexColumnStartStart, FlexRowAllCenter, FlexRowBetweenCenter, FlexRowCenterEnd, FlexRowCenterStart, FlexRowStartCenter, FlexRowStartStart } from "../css/common";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 import SidaBar from "../assets/common/sidebar_back.png";
 import marktet from "../assets/logo/marketb.png"
 import zip from "../assets/logo/zip.png"
 import ugly from "../assets/logo/uglystone.png"
 import barun from "../assets/logo/barun.webp"
 import main from "../assets/main.jpg"
+import m_1 from "../assets/project/m_1.png"
+import m_2 from "../assets/project/m_2.png"
+import m_8 from "../assets/project/m_8.jpeg"
+import zi from "../assets/project/z_1.png"
+import sc_1 from "../assets/project/sc_1.jpg"
+import sc_2 from "../assets/project/sc_2.jpeg"
+import k_1 from "../assets/project/k_1.png"
+import k_2 from "../assets/project/k_2.png"
+import k_3 from "../assets/project/k_3.png"
+import no from "../assets/project/no.jpg"
+
+
+// 1. 필요한 타입 정의
+interface Project {
+    title: string;
+    skills: string;
+    description: string[];
+    img: string;
+    link: string | null;
+    isVideo?: boolean;
+}
+
+interface CareerItem {
+    job: string;
+    Date: string;
+    intro: string;
+    img: string;
+    text: string;
+}
+
+interface StackItem {
+    title: string;
+    data: string[];
+}
+
+interface ProjectGridProps {
+    projects: Project[];
+    handleProjectClick: (link: string | null, isVideo?: boolean) => void;
+}
+
+// 2. ProjectGrid 컴포넌트에도 타입 적용
+const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick }) => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", marginLeft: "20px", gap: "15px", }}>          
+        {projects.map((project: Project, index: number) => (
+            <FlexColumnStartCenter
+                key={index}
+                style={{
+                    border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", 
+                    padding: "5px", 
+                    borderRadius: "10px", 
+                    width: "100%",
+                    cursor: project.link ? "pointer" : "default",
+                    transition: "box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out",
+                    position: 'relative'
+                }}
+                onClick={() => handleProjectClick(project.link, project.isVideo)}
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => project.link && (e.currentTarget.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.1)")}
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => project.link && (e.currentTarget.style.boxShadow = "none")}
+            >
+                <div style={{ position: 'relative', width: '100%', height: '150px', marginBottom: '15px' }}>
+                    <img 
+                        src={project.img} 
+                        style={{ width: "100%", height: "150px", borderRadius: "8px 8px 0 0", objectFit: "cover" }} 
+                        alt={project.title}
+                    />
+                    {/* 비디오 아이콘 오버레이 */}
+                    {project.isVideo && (
+                        <div style={{
+                            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
+                            backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                            borderRadius: "8px 8px 0 0",
+                            fontSize: '3rem', color: 'white'
+                        }}>
+                            ▶
+                        </div>
+                    )}
+                </div>
+
+                <div style={{ padding: "0 10px 10px" }}>
+                    <h3 style={{ fontSize: "15px", fontWeight: "bold", margin: "5px 0" }}>{project.title}</h3>
+                    <h5 style={{ fontSize: "13px", color: "#6b7280", margin: "5px 0" }}>{project.skills}</h5>
+                    <FlexColumnStartCenter style={{ marginTop: "10px", textAlign: "left" }}>
+                        {/* desc와 descIndex에 명시적 타입 선언 (number) */}
+                        {project.description.map((desc: string, descIndex: number) => (
+                            <p key={descIndex} style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "12px", margin: "2px 0" }}>
+                                {desc}
+                            </p>
+                        ))}
+                    </FlexColumnStartCenter>
+                    {project.link && (
+                        <div style={{ textAlign: "center", marginTop: "10px", color: project.isVideo ? "#EF4444" : "#2563EB", fontSize: "13px", fontWeight: "bold" }}>
+                            🔗 {project.isVideo ? "시연 영상 재생" : "보러가기"}
+                        </div>
+                    )}
+                </div>
+            </FlexColumnStartCenter>
+        ))}
+    </div>
+);
 
 function Home() {
-    const [selectedIndex, setSelectedIndex] = useState(0); // 사이드바 선택 메뉴
-    const [expandedIndex, setExpandedIndex] = useState(null); // 경력 상세 내용 확장 상태
+    // 3. useState에도 타입 적용
+    const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // 경력 상세 내용 확장 상태
+    const [showVideoModal, setShowVideoModal] = useState<boolean>(false); // 비디오 모달 표시 상태
+    const [videoSource, setVideoSource] = useState<string>(""); // 현재 재생할 비디오 소스
 
-    const career = [
-        { job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업"  , img:barun , 
-        text: "Django를 이용한 API 생성 및 기능구현등\nNext.js를 활용하여 amplify에 배포를 진행\nphp를 활용한, CRM 및 Next.js, Django를 활용하여 어드민 사이트를 개발\n행정24, 케이비자 멤버십, 케이비자 파트너스라는 비자 관련 다양한 형태의 서비스를 개발 및 유지보수\n케이비자 파트너스라는 플랫폼을 통해 다양한 대기업 [전북은행, LGU+, Cu]와 협업을 진행\n행정돕다 AI개발을 통해 행정24와 접목하여, 행정시장을 더욱 편리하게 진행할 수 있도록 개발을 진행"
+    // 4. 데이터 배열에 타입 적용
+    const career: CareerItem[] = [
+        {
+            job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업", img: barun,
+            text: "Django를 이용한 API 생성 및 기능구현등\nNext.js를 활용하여 행정24 플랫폼을 개발하고 amplify통해 배포를 진행\nphp를 활용한, 케이비자 행정사무소 CRM 및 Next.js, Django를 활용하여 어드민 사이트를 개발\nNext js , DJango를 활용하여  케이비자 파트너스라는 비자 접수 서비스를 개발 및 유지보수\n케이비자 파트너스라는 플랫폼을 통해 다양한 대기업 [전북은행, LGU+, Cu]와 협업을 진행\nAWS-Bedrock을 이용하여 행정돕다 AI 개발 및  행정24와 접목하여, 행정시장을 더욱 편리하게 진행할 수 있도록 작업\n"
+                + "Selenium을 활용하여 데이터 학습을 위한 법제처 스크롤링 및 pdf파일을 다운로드"
         },
-        { job: "주식회사 어글리스톤", Date: "2022.01 - 2024.11 . 2년 10개월", intro: "리사이클 업계의 불공정한 거래를 해결하고 투명한 거래를 위한 플랫폼" , img:ugly , 
-        text: "Django를 이용한 API 생성 및 기능구현등\nReact.ts를 활용하여 AWS Beanstalk에 배포를 진행 \nReact와 ReactNative를 이용한 웹뷰 및 앱개발 완료\n채팅부분 서버 분리를 위해 Nest.js를 이용하여 작업 및 유지보수\n[메인서버 - AWS , 채팅서버(socket) - NaverCloud]\n네이버 api, 카카오 api를 활용한 지도 및 기타 기능등 전반적인 업무 진행\n위의 기능들을 활용한 전반적인 앱 개발 업무 및\n회원가입,로그인,채팅,필터링, 푸시알림 , 지도등 전반적인업무진행"
+        {
+            job: "주식회사 어글리스톤", Date: "2022.01 - 2024.11 . 2년 10개월", intro: "리사이클 업계의 불공정한 거래를 해결하고 투명한 거래를 위한 플랫폼", img: ugly,
+            text: "Django를 이용한 API 생성 및 기능구현등\nReact.ts를 활용하여 스크랩마켓 웹뷰를 AWS Beanstalk통해 배포를 진행 \nReact와 ReactNative를 이용한 웹뷰 및 앱개발 완료\n채팅부분 서버 분리를 위해 Nest.js를 이용하여 작업 및 유지보수\n[메인서버 - AWS , 채팅서버(socket) - NaverCloud]\n네이버 api, 카카오 api를 활용한 지도 및 기타 기능등 전반적인 업무 진행\n위의 기능들을 활용한 전반적인 앱 개발 업무 및\n회원가입,로그인,채팅,필터링, 푸시알림 , 지도등 전반적인업무진행"
         },
-        { job: "집대장", Date: "2021.12 - 2022.01 ‧ 2개월", intro: "전원주택 타운하우스 한옥등 주택을 거래하는 플랫폼" , img:zip , 
-            text : "React js와 node js, express를 활용한 전체적인 업무 진행\nAWS EC2와 도메인을 연결,\nAWS RDS 기반의 MySQL DB 구축 및 최적화된 데이터 모델링 수행\nT Map, kakao Map등 다양한 지도 api, 를 활용한, 위치기반 매물정보 기능 구현\n위의 기능들을 활용한 전반적인 퍼블리싱 업무 및\n회원가입,로그인 기능을 구현"
+        {
+            job: "집대장", Date: "2021.12 - 2022.01 ‧ 2개월", intro: "전원주택 타운하우스 한옥등 주택을 거래하는 플랫폼", img: zip,
+            text: "React js와 node js, express를 활용한 전체적인 업무 진행\nAWS EC2와 도메인을 연결,\nAWS RDS 기반의 MySQL DB 구축 및 최적화된 데이터 모델링 수행\nT Map, kakao Map등 다양한 지도 api, 를 활용한, 위치기반 매물정보 기능 구현\n위의 기능들을 활용한 전반적인 퍼블리싱 업무 및\n회원가입,로그인 기능을 구현"
         },
-        { job: "주식회사마켓비", Date: "2019.12 - 2021.11 ‧ 2년", intro: "가성비 높은 가구와 인테리어 소품을 판매하는 온라인 쇼핑몰" , img:marktet , 
-            text : "Html,css,js, Vue js 를 활용하여 행사및 각종기획전등 사이트 전반적인 수정업무 진행\nDocker Container안에 Django를 배포하여 DB연동및 이벤트 지원자 취합을 위한, 모델을 생성하여 관리\nCafe24 가상서버 접속후 Google Triger를 활용하여 Google sheet 자동화를 진행\nCafe24 API를 이용하여 매출및 판매기록등 DB를 구글시트로 작성\n개발이외에 추가적인 근태관리 및 소비자환불등 기타 업무등을 진행"
-         },
+        {
+            job: "주식회사마켓비", Date: "2019.12 - 2021.11 ‧ 2년", intro: "가성비 높은 가구와 인테리어 소품을 판매하는 온라인 쇼핑몰", img: marktet,
+            text: "Html,css,js, Vue js 를 활용하여 행사및 각종기획전등 사이트 전반적인 수정업무 진행\nDocker Container안에 Django를 배포하여 DB연동및 이벤트 지원자 취합을 위한, 모델을 생성하여 관리\nCafe24 가상서버 접속후 Google Triger를 활용하여 Google sheet 자동화를 진행\nCafe24 API를 이용하여 매출및 판매기록등 DB를 구글시트로 작성\n개발이외에 추가적인 근태관리 및 소비자환불등 기타 업무등을 진행"
+        },
 
     ];
 
-    const handleToggle = (index:any) => {
+    const stack: StackItem[] = [
+        { title: "Language", data: ["JavaScript", "TypeScript", "css", "Python", "SQL"] },
+        { title: "FrontEnd", data: ["Next js", "React js", "Zustand", "Redux", "ReactNative", "Styled-Components"] },
+        { title: "BackEnd", data: ["Node js", "Socket io", "Docker", "Django", "PostgreSQL", "MySQL"] },
+        { title: "Cloud", data: ["AWS", "NaverCloud", "Vercel"] },
+        { title: "AI", data: ["AWS-Bedrock", "OpenAI"] },
+        { title: "Etc", data: ["Selenium", "Pandas", "openpyxl"] },
+    ];
+    
+    // 주식회사 마켓비 프로젝트
+    const marketBProjects: Project[] = [
+        {
+            title: "위탁사 데이터분리 & 신규 웹사이트 구축",
+            skills: "Django, Docker, Vue",
+            description: [
+                "- 팀원들과 공유 중 버전 이슈 문제 발생. Docker container 패키징 작업을 진행하여 해결",
+                "- 데이터를 이전하는데 누락 문제 발생. 백업했던 데이터로 복구 후 문제 해결"
+            ],
+            img: m_1,
+            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954"
+        },
+        {
+            title: "대리점 안내 서비스 구현",
+            skills: "Django, Vue, NaverMap",
+            description: [
+                "- 지도에 네비게이션 기능을 구현하여 지역별로 방문을 쉽게 구현",
+                "- 전화번호 클릭 시 전화연결 및 주소 복사 등 편의성 기능 구현"
+            ],
+            img: m_2,
+            link: null
+        },
+        {
+            title: "각종 행사 및 기획전 작업",
+            skills: "Django, Vue",
+            description: [
+                "- 각종 기획전 및 타이머 스크롤 등 기능 구현",
+                "- 타이머를 이용한 자동화 및 이벤트지원자 취합 등 각종 기능 개발"
+            ],
+            img: m_8,
+            link: null
+        },
+    ];
+
+    // 집대장 프로젝트
+    const zipProjects: Project[] = [
+        {
+            title: "전원주택 및 타운하우스등 웹사이트 구축",
+            skills: "Nodejs , React",
+            description: [
+                "- 지도부분 기능 개발에서 마커 및 길찾기 거리뷰등 다양한 기능을 개발",
+                "- 360도 카메라 이미지를 활용하여 3D 스마트뷰 기능을 개발"
+            ],
+            img: zi,
+            link: null
+        },
+    ]
+
+    // 주식회사 어글리스톤 프로젝트
+    const scrapProjects: Project[] = [
+        {
+            title: "스크랩마켓 웹사이트 구축",
+            skills: "Django , React",
+            description: [
+                "- 채팅서버[NaverCloud] 메인서버[AWS] 분리작업",
+                "- 채팅 . 경매 . 지도 . 명함커스텀등 다양한 기능을 구축" ,
+                "- 채팅에서 명함 전송시 커스텀요소가 많아 호출속도 저하문제발생 -> 커스텀한 명함을 이미지화하여 속도문제개선" , 
+                "- 일별 평균 거래시세를 변동시간 기준 자동으로반영되도록 작업" , 
+            ],
+            img: sc_1,
+            link: null
+        },
+        {
+            title: "스크랩마켓 웹뷰를 이영힌 앱개발",
+            skills: "Django , ReactNative",
+            description: [
+                "- 웹에서의 전반적인기능 + AOS 위젯을 구축",
+                "- 딥링크를 활용한 네비게이션기능을 구축"
+            ],
+            img: sc_2,
+            link: null
+        },
+    ]
+    
+    // 바른행정 주식회사 프로젝트
+    const barunProjects: Project[] = [
+        {
+            title: "행정24 플랫폼 구축",
+            skills: "Next.js, Django",
+            description: [
+                "- 행정업무 접수 신청후 일정시간경과후 , 자동으로 업무 진행상태 변경기능을 구축",
+                "- 행정법인의경우도 진행을 할수있도록 , 유저로직 분리 및 최적화 작업을 진행"
+            ],
+            img: k_1,
+            link: "https://www.enetnews.co.kr/news/articleView.html?idxno=34295"
+        },
+        {
+            title: "케이비자 파트너스 구축",
+            skills: "Next.js, Django",
+            description: [
+                "- LGU+, CU , 전북은행등 대기업 협업을 위한 비자 접수 서비스 플랫폼 개발 및 유지보수",
+                "- QR코드를통한 상담폼진입 -> 설문을 진행후 내부담당자배정을 통한 상담을진행" ,
+                "- 전북은행 브라보코리아 비자발급 기능에 웹뷰개발을 통한 협업을 진행"
+            ],
+            img: k_2,
+            link: "https://www.fetv.co.kr/news/article.html?no=191348"
+        },
+        {
+            title: "결혼비자 셀프테스트를 구축",
+            skills: "React , php",
+            description: [
+                "- 케이비자 결혼비자 셀프테스트를 구축하여 , 상담전 본인의 충족여부를 검증하도록 구현",
+            ],
+            img: k_3,
+            link: "https://www.k-visa.co.kr/html/F6/"
+        },
+        {
+            title: "행정돕다 AI를 개발",
+            skills: "Python, Django, React",
+            description: [
+                "- AI 학습을 위한 법제처 데이터 스크래핑 자동화 (Selenium)",
+                "- PDF 문서 자동 다운로드 및 데이터 정제 파이프라인 구축" , 
+                "- 정기 결제 기능을 구축하여 특정시간 기준으로 자동 결제 기능구축",
+            ],
+            img: no, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
+            link: "", // 동영상 소스 링크 [k3]
+            // isVideo: true, // 비디오임을 표시
+        },
+    ];
+
+
+    // 5. 함수 매개변수에 타입 적용
+    const handleToggle = (index: number | null) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
+    
+    // 5. 함수 매개변수에 타입 적용
+    const handleProjectClick = (link: string | null, isVideo: boolean = false) => {
+        if (isVideo && link) {
+            setVideoSource(link);
+            setShowVideoModal(true);
+        } else if (link) {
+            window.open(link, "_blank");
+        }
+    };
+    
+    // 비디오 모달 컴포넌트
+    const VideoModal: React.FC = () => (
+        <VideoModalOverlay 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowVideoModal(false)} // 오버레이 클릭 시 닫기
+        >
+            <VideoContainer onClick={(e) => e.stopPropagation()}> {/* 컨테이너 클릭 시 모달 닫힘 방지 */}
+                <CloseButton onClick={() => setShowVideoModal(false)}>
+                    &times;
+                </CloseButton>
+                <video 
+                    key={videoSource} // key를 변경하여 컴포넌트를 리셋하고 자동 재생을 보장
+                    width="100%" 
+                    height="100%" 
+                    autoPlay 
+                    loop 
+                    controls 
+                    style={{ display: 'block', maxWidth: '100%', maxHeight: '100%' }}
+                >
+                    <source src={videoSource} type="video/mp4" />
+                    현재 브라우저는 비디오 태그를 지원하지 않습니다.
+                </video>
+            </VideoContainer>
+        </VideoModalOverlay>
+    );
 
     return (
         <FlexRowCenterStart
             style={{
-                // background: "linear-gradient(to top right,#9cb4f2 0%,#abb6f2 10.46%,#7a9dee 39.63%,#2f61b7 67.29%,#123b9e 82.61%,#000539 100%)",
                 width: "100%",
                 height: "100%",
-                color: "white", overflow: "auto",
+                color: "white", overflow: "auto", 
+                paddingBottom:"100px"
             }}
         >
-            {/* <SidaBar selectedIndex={selectedIndex} onSelect={setSelectedIndex} /> */}
-
             <FlexColumnStartCenter style={{ color: "black", height: "100%", width: "100%", overflow: "auto" }}>
-                {selectedIndex === 0 &&
-                    <FlexColumnStartStart style={{ width: "700px", height: "100%" }}>
-                        <FlexRowStartStart style={{ width: "700px", marginTop: "150px" }}>
-                            <img src={main} style={{ width: "110px", borderRadius: "50%", marginRight: "20px" }} />
-                            <FlexColumnCenterStart>
-                                <h3 style={{ fontSize: "20px" }}>김성원</h3>
-                                <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "15px" }}>풀스택 개발자</span>
-                                <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>
-                                    <span>+82 10-8075-8012&nbsp;&nbsp;&nbsp;</span>
-                                    <span>|</span>
-                                    <span>&nbsp;&nbsp;&nbsp;kimeende@naver.com</span>
-                                </FlexRowAllCenter>
-                            </FlexColumnCenterStart>
-                        </FlexRowStartStart>
-                        <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" }}>
-                            안녕하세요.<br />
-                            6년차 개발자 김성원입니다.<br />
-                            Django, Node, React, Kotlin 등 다양한 언어와 프레임워크를 기반으로
-                            웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />
-                            특히, 풍부하고 다양한 기술을 바탕으로
-                            회사 내부 인원과 서비스를 이용하는 회원들에게 혁신적인 솔루션을 제공한 경험이 있습니다.<br />
-                            새로운 기능 개발에 두려워하지 않고 끊임없이 성장하며
-                            다양한 프로젝트에 기여하고 싶습니다.<br />
-                            감사합니다.
-                        </FlexRowAllCenter>
-                        <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
-                            <span>🚀 </span>
-                            <Line>경력</Line>
-                        </FlexRowBetweenCenter>
-                        {career.map((item, index) => (
-                            <FlexColumnCenterStart style={{ border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", padding: "10px 25px", width: "95%", borderRadius: "20px",
-                                marginTop:index===0? 0 : 20 , marginLeft:"20px"
-                             }} key={index} onClick={() => handleToggle(index)}> 
-                                <FlexRowBetweenCenter style={{ width: "100%" }}>
-                                    <FlexRowStartStart>
-                                        <span style={{ fontSize: "15px" }}>{item.job}</span>
-                                        <img src = {item.img} style={{ height:"15px" , marginLeft:"10px" }}/>
-                                    </FlexRowStartStart>
-                                    <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>{item.Date}</span>
-                                </FlexRowBetweenCenter>
-                                <FlexRowBetweenCenter style={{ width: "100%" }}>
-                                    <span style={{ marginTop: "10px", fontSize: "14px" }}>{item.intro}</span>
-                                    <img src={SidaBar}
-                                        style={{
-                                            height: "20px", transform: expandedIndex === index ? "rotate(270deg)" : "rotate(90deg)", transition: "transform 0.3s ease"
-                                        }}
-                                    />
-                                </FlexRowBetweenCenter>
-                                {expandedIndex === index && item.text && (
-                                    <FlexColumnStartStart style={{
-                                        width: "100%",
-                                        marginTop: "10px",
-                                        padding: "10px",
-                                        backgroundColor: "#f9f9f9",
-                                        borderRadius: "10px",
-                                        whiteSpace: "pre-line",
-                                        fontSize: "13px",
-                                        color: "#555",
-                                    }}>
-                                        {item.text}
-                                    </FlexColumnStartStart>
-                                )}
+                <FlexColumnStartStart style={{ width: "700px", height: "100%", }}>
+                    
+                    {/* 개인 정보 섹션 */}
+                    <FlexRowStartStart style={{ width: "700px", marginTop: "150px" }}>
+                        <img src={main} style={{ width: "110px", borderRadius: "50%", marginRight: "20px" }} alt="프로필 이미지"/>
+                        <FlexColumnCenterStart>
+                            <h3 style={{ fontSize: "20px" }}>김성원</h3>
+                            <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "15px" }}>풀스택 개발자</span>
+                            <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>
+                                <span>+82 10-8075-8012&nbsp;&nbsp;&nbsp;</span>
+                                <span>|</span>
+                                <span>&nbsp;&nbsp;&nbsp;kimeende@naver.com</span>
+                            </FlexRowAllCenter>
+                        </FlexColumnCenterStart>
+                    </FlexRowStartStart>
+                    <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" }}>
+                        안녕하세요.<br />
+                        6년차 개발자 김성원입니다.<br />
+                        Django, Node, React, Kotlin 등 다양한 언어와 프레임워크를 기반으로
+                        웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />
+                        특히, 풍부하고 다양한 기술을 바탕으로
+                        회사 내부 인원과 서비스를 이용하는 회원들에게 혁신적인 솔루션을 제공한 경험이 있습니다.<br />
+                        새로운 기능 개발에 두려워하지 않고 끊임없이 성장하며
+                        다양한 프로젝트에 기여하고 싶습니다.<br />
+                        감사합니다.
+                    </FlexRowAllCenter>
 
-                            </FlexColumnCenterStart>
+                    {/* 경력 섹션 */}
+                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                        <span>🚀 </span>
+                        <Line>경력</Line>
+                    </FlexRowBetweenCenter>
+                    {career.map((item, index) => (
+                        <FlexColumnCenterStart 
+                            style={{
+                                border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", padding: "10px 25px", width: "95%", borderRadius: "10px",
+                                marginTop: index === 0 ? 0 : 20, marginLeft: "20px", cursor: "pointer",
+                            }} 
+                            key={index} 
+                            onClick={() => handleToggle(index)}
+                        >
+                            <FlexRowBetweenCenter style={{ width: "100%" }}>
+                                <FlexRowStartStart>
+                                    <span style={{ fontSize: "15px" }}>{item.job}</span>
+                                    <img src={item.img} style={{ height: "15px", marginLeft: "10px" }} alt={`${item.job} 로고`} />
+                                </FlexRowStartStart>
+                                <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>{item.Date}</span>
+                            </FlexRowBetweenCenter>
+                            <FlexRowBetweenCenter style={{ width: "100%" }}>
+                                <span style={{ marginTop: "10px", fontSize: "14px" }}>{item.intro}</span>
+                                <img src={SidaBar}
+                                    style={{
+                                        height: "20px", transform: expandedIndex === index ? "rotate(270deg)" : "rotate(90deg)", transition: "transform 0.3s ease"
+                                    }}
+                                    alt="토글 아이콘"
+                                />
+                            </FlexRowBetweenCenter>
+                            <AnimatePresence>
+                                {expandedIndex === index && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        style={{
+                                            width: "100%",
+                                            marginTop: "10px",
+                                            padding: "10px",
+                                            backgroundColor: "#f9f9f9",
+                                            borderRadius: "10px",
+                                            whiteSpace: "pre-line",
+                                            fontSize: "13px",
+                                            color: "#555",
+                                            overflow: "hidden"
+                                        }}
+                                    >
+                                        {item.text}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </FlexColumnCenterStart>
+                    ))}
+                    
+                    {/* 스택 섹션 */}
+                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                        <span>🛠️ </span>
+                        <Line>스택</Line>
+                    </FlexRowBetweenCenter>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", marginLeft: "20px", gap: "10px", }}>
+                        {stack.map((item, index) => (
+                            <FlexColumnStartStart style={{
+                                border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", padding: "10px", borderRadius: "10px", width: "100%",
+                            }} key={index}>
+                                <h3 style={{ fontSize: "15px" }}>{item.title}</h3>
+                                <FlexRowStartStart style={{ flexWrap: "wrap", marginTop: "10px", gap: 5 }}>
+                                    {item.data.map((stackItem, index) => (
+                                        <p key={index} style={{
+                                            margin: 0, color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px",
+                                            backgroundColor: "#eee", padding: "2px 8px", borderRadius: "5px"
+                                        }}>
+                                            {stackItem}</p>
+                                    ))}
+                                </FlexRowStartStart>
+                            </FlexColumnStartStart>
                         ))}
-                    </FlexColumnStartStart>
-                }
-                {selectedIndex === 1 &&
-                    <FlexColumnAllCenter style={{ width: "100%", height: "100%" }}>
-                        커리어
-                    </FlexColumnAllCenter>
-                }
-                {selectedIndex === 2 && <FlexColumnAllCenter style={{ width: "100%", height: "100%" }}>
-                    프로젝트
-                </FlexColumnAllCenter>
-                }
-                {selectedIndex === 3 && <FlexColumnAllCenter style={{ width: "100%", height: "100%" }}>
-                    Contact
-                </FlexColumnAllCenter>
-                }
+                    </div>
+
+                    {/* 프로젝트 섹션 */}
+                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                        <span>💻 </span>
+                        <Line>프로젝트</Line>
+                    </FlexRowBetweenCenter>
+
+                    {/* 주식회사 마켓비 */}
+                    <img src={marktet} style={{ height: "30px", margin: "0px auto 30px 20px" }} alt="마켓비 로고" />
+                    <ProjectGrid projects={marketBProjects} handleProjectClick={handleProjectClick} />
+                    
+                    {/* 집대장 */}
+                    <img src = {zip} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="집대장 로고" />
+                    <ProjectGrid projects={zipProjects} handleProjectClick={handleProjectClick} />
+
+                    {/* 주식회사 어글리스톤 */}
+                    <img src = {ugly} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="어글리스톤 로고" />
+                    <ProjectGrid projects={scrapProjects} handleProjectClick={handleProjectClick} />
+
+                    {/* 바른행정 주식회사 */}
+                    <img src = {barun} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="바른행정 로고" />
+                    <ProjectGrid projects={barunProjects} handleProjectClick={handleProjectClick} />
+
+                </FlexColumnStartStart>
             </FlexColumnStartCenter>
+
+            {/* 비디오 모달 렌더링 */}
+            <AnimatePresence>
+                {showVideoModal && <VideoModal />}
+            </AnimatePresence>
 
         </FlexRowCenterStart>
     );
 }
 
 export default Home;
+
+// 비디오 모달 스타일 컴포넌트
+const VideoModalOverlay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+`;
+
+const VideoContainer = styled.div`
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 800px; /* 고정 최대 너비 */
+    height: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    aspect-ratio: 16 / 9; /* 표준 비디오 비율 */
+    background-color: black;
+`;
+
+const CloseButton = styled.button`
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10001;
+    transition: background 0.3s;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+`;
 
 const Line = styled.div`
     background:#f0f0f0;
