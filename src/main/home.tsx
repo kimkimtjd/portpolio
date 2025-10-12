@@ -68,11 +68,19 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
                 onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => project.link && (e.currentTarget.style.boxShadow = "none")}
             >
                 <div style={{ position: 'relative', width: '100%', height: '150px', marginBottom: '15px' }}>
+                    {project.img === no ? 
+                        <div 
+                        style={{ width: "100%", height: "150px", borderRadius: "8px" , display:"flex" , justifyContent:"center" , alignItems:"center" , border:"1px solid rgb(229 231 235 / var(--tw-border-opacity, 1))" }} 
+                        >
+                            개발중
+                        </div>
+                        :
                     <img 
                         src={project.img} 
                         style={{ width: "100%", height: "150px", borderRadius: "8px 8px 0 0", objectFit: "cover" }} 
                         alt={project.title}
                     />
+                    }
                     {/* 비디오 아이콘 오버레이 */}
                     {project.isVideo && (
                         <div style={{
@@ -153,13 +161,14 @@ function Home() {
             skills: "Django, Docker, Vue",
             description: [
                 "- 팀원들과 공유 중 버전 이슈 문제 발생. Docker container 패키징 작업을 진행하여 해결",
-                "- 데이터를 이전하는데 누락 문제 발생. 백업했던 데이터로 복구 후 문제 해결"
+                "- 데이터를 이전하는데 누락 문제 발생. 백업했던 데이터로 복구 후 문제 해결" ,
+                "- 입금내역을 1분마다 확인하여 위탁업체 적립금을 자동으로 충전하는 기능을 구축",
             ],
             img: m_1,
             link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954"
         },
         {
-            title: "대리점 안내 서비스 구현",
+            title: "대리점 안내 서비스 구축",
             skills: "Django, Vue, NaverMap",
             description: [
                 "- 지도에 네비게이션 기능을 구현하여 지역별로 방문을 쉽게 구현",
@@ -209,7 +218,7 @@ function Home() {
             link: null
         },
         {
-            title: "스크랩마켓 웹뷰를 이영힌 앱개발",
+            title: "스크랩마켓 웹뷰를 이용힌 앱개발",
             skills: "Django , ReactNative",
             description: [
                 "- 웹에서의 전반적인기능 + AOS 위젯을 구축",
@@ -338,7 +347,7 @@ function Home() {
                     <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" }}>
                         안녕하세요.<br />
                         6년차 개발자 김성원입니다.<br />
-                        Django, Node, React, Kotlin 등 다양한 언어와 프레임워크를 기반으로
+                        Django, Node, React 등 다양한 언어와 프레임워크를 기반으로
                         웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />
                         특히, 풍부하고 다양한 기술을 바탕으로
                         회사 내부 인원과 서비스를 이용하는 회원들에게 혁신적인 솔루션을 제공한 경험이 있습니다.<br />
