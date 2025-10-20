@@ -17,6 +17,7 @@ import sc_2 from "../assets/project/sc_2.jpeg"
 import k_1 from "../assets/project/k_1.png"
 import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
+import k_4 from "../assets/project/k_4.webp"
 import no from "../assets/project/no.jpg"
 
 
@@ -260,6 +261,16 @@ function Home() {
             ],
             img: k_3,
             link: "https://www.k-visa.co.kr/html/F6/"
+        },
+        {
+            title: "케이비자 알리미 웹뷰 구축",
+            skills: "React , ReactNative , Django",
+            description: [
+                "- 케이비자 알리미를 구축하여 회원들을 대상으로 비자만료기간 푸시알림 기능을 개발",
+                "- 안드로이드에서 위젯기능을 추가하여 , 만료기간을 주기적으로 확인가능하도록 구축",
+            ],
+            img: k_4,
+            link: "https://play.google.com/store/apps/details?id=com.kvisaapp"
         },
         {
             title: "행정돕다 AI를 개발",
