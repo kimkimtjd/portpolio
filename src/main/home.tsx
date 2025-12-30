@@ -18,6 +18,7 @@ import k_1 from "../assets/project/k_1.png"
 import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
 import k_4 from "../assets/project/k_4.webp"
+import k_5 from "../assets/project/k_5.png"
 import no from "../assets/project/no.jpg"
 
 
@@ -128,8 +129,9 @@ function Home() {
     const career: CareerItem[] = [
         {
             job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업", img: barun,
-            text: "Django를 이용한 API 생성 및 기능구현등\nNext.js를 활용하여 행정24 플랫폼을 개발하고 amplify통해 배포를 진행\nphp를 활용한, 케이비자 행정사무소 CRM 및 Next.js, Django를 활용하여 어드민 사이트를 개발\nNext js , DJango를 활용하여  케이비자 파트너스라는 비자 접수 서비스를 개발 및 유지보수\n케이비자 파트너스라는 플랫폼을 통해 다양한 대기업 [전북은행, LGU+, Cu]와 협업을 진행\nAWS-Bedrock을 이용하여 행정돕다 AI 개발 및  행정24와 접목하여, 행정시장을 더욱 편리하게 진행할 수 있도록 작업\n"
-                + "Selenium을 활용하여 데이터 학습을 위한 법제처 스크롤링 및 pdf파일을 다운로드"
+            text: "Django를 이용한 API 생성 및 기능구현등\nNext.js를 활용하여 행정24 플랫폼을 개발하고 amplify통해 배포를 진행\nphp를 활용한, 케이비자 행정사무소 CRM 및 Next.js, Django를 활용하여 어드민 사이트를 개발\nNext js , DJango를 활용하여  케이비자 파트너스라는 비자 접수 서비스를 개발 및 유지보수\n케이비자 파트너스라는 플랫폼을 통해 다양한 대기업 [전북은행, LGU+, Cu]와 협업을 진행\nAWS-Bedrock을 이용하여 케이비자 AI 개발 및  비자24와 접목하여, 비자 관련 서비스 업무를 확장\n"
+                + "Selenium을 활용하여 데이터 학습을 위한 법제처 스크롤링 및 pdf파일을 다운로드\nAWS OpenSearchService를 이용하여 RAG시스템을 통한 할루시네이션 감소"
+                + ""
         },
         {
             job: "주식회사 어글리스톤", Date: "2022.01 - 2024.11 . 2년 10개월", intro: "리사이클 업계의 불공정한 거래를 해결하고 투명한 거래를 위한 플랫폼", img: ugly,
@@ -254,9 +256,10 @@ function Home() {
             link: "https://www.fetv.co.kr/news/article.html?no=191348"
         },
         {
-            title: "결혼비자 셀프테스트를 구축",
+            title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
             skills: "React , php",
             description: [
+                "- 케이비자 사이트 전체를 리뉴얼작업",
                 "- 케이비자 결혼비자 셀프테스트를 구축하여 , 상담전 본인의 충족여부를 검증하도록 구현",
             ],
             img: k_3,
@@ -266,18 +269,28 @@ function Home() {
             title: "케이비자 알리미 웹뷰 구축",
             skills: "React , ReactNative , Django",
             description: [
-                "- 케이비자 알리미를 구축하여 회원들을 대상으로 비자만료기간 푸시알림 기능을 개발",
+                "- 케이비자 알리미를 구축하여 회원들을 대상으로 비자만료기간 FCM알림 기능을 개발",
                 "- 안드로이드에서 위젯기능을 추가하여 , 만료기간을 주기적으로 확인가능하도록 구축",
             ],
             img: k_4,
             link: "https://play.google.com/store/apps/details?id=com.kvisaapp"
         },
         {
-            title: "행정돕다 AI를 개발",
+            title: "행정심판연구소 구축",
+            skills: "React , Vite ,  Django",
+            description: [
+                "- AWS S3 Pre-Signed URL 기술을 활용하여 동영상에 대한 보안접근 구현 및 유효 기간 설정 관리 시스템 구축.",
+                "- PG결제연동을 통한 회원가입.로그인등 각종 기능을 구현",
+            ],
+            img: k_5,
+            link: "https://www.hangsim.co.kr"
+        },
+        {
+            title: "케이비자 AI를 개발",
             skills: "Python, Django, React",
             description: [
                 "- AI 학습을 위한 법제처 데이터 스크래핑 자동화 (Selenium)",
-                "- PDF 문서 자동 다운로드 및 데이터 정제 파이프라인 구축" , 
+                "- PDF 문서 자동 다운로드 및 OCR을 통한 데이터 수집" , 
                 "- 정기 결제 기능을 구축하여 특정시간 기준으로 자동 결제 기능구축",
             ],
             img: no, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
