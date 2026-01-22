@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { FlexColumnAllCenter, FlexColumnCenterStart, FlexColumnStartCenter, FlexColumnStartStart, FlexRowAllCenter, FlexRowBetweenCenter, FlexRowCenterEnd, FlexRowCenterStart, FlexRowStartCenter, FlexRowStartStart } from "../css/common";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,6 +19,8 @@ import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
 import k_4 from "../assets/project/k_4.webp"
 import k_5 from "../assets/project/k_5.png"
+import k_6 from "../assets/project/k_6.png"
+
 import no from "../assets/project/no.jpg"
 
 
@@ -48,11 +50,16 @@ interface StackItem {
 interface ProjectGridProps {
     projects: Project[];
     handleProjectClick: (link: string | null, isVideo?: boolean) => void;
+    windowWidth:number;
 }
 
 // 2. ProjectGrid 컴포넌트에도 타입 적용
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick }) => (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", marginLeft: "20px", gap: "15px", }}>          
+const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick , windowWidth }) => (
+    <div style={{ display: windowWidth < 700 ? "flex": "grid", gridTemplateColumns: "repeat(3, 1fr)", marginLeft: windowWidth < 700 ? "0px" : "20px", gap: "15px",
+        justifyContent:windowWidth < 700 ? "center": "" ,
+        alignItems:windowWidth < 700 ? "center": "" ,
+        flexDirection:windowWidth < 700 ? "column": "row" ,
+     }}>          
         {projects.map((project: Project, index: number) => (
             <FlexColumnStartCenter
                 key={index}
@@ -60,16 +67,17 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
                     border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", 
                     padding: "5px", 
                     borderRadius: "10px", 
-                    width: "100%",
+                    width: windowWidth < 700 ? "95%" :"100%",
                     cursor: project.link ? "pointer" : "default",
                     transition: "box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out",
-                    position: 'relative'
+                    position: 'relative',
+                    justifyContent:windowWidth < 700 ? "center" : "flex-start",
                 }}
                 onClick={() => handleProjectClick(project.link, project.isVideo)}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => project.link && (e.currentTarget.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.1)")}
                 onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => project.link && (e.currentTarget.style.boxShadow = "none")}
             >
-                <div style={{ position: 'relative', width: '100%', height: '150px', marginBottom: '15px' }}>
+                <div style={{ position: 'relative', width: windowWidth < 700 ? "95%" :'100%', height: '150px', marginBottom: '15px' }}>
                     {project.img === no ? 
                         <div 
                         style={{ width: "100%", height: "150px", borderRadius: "8px" , display:"flex" , justifyContent:"center" , alignItems:"center" , border:"1px solid rgb(229 231 235 / var(--tw-border-opacity, 1))" }} 
@@ -79,7 +87,7 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
                         :
                     <img 
                         src={project.img} 
-                        style={{ width: "100%", height: "150px", borderRadius: "8px 8px 0 0", objectFit: "cover" }} 
+                        style={{ width:"100%", height:"150px", borderRadius: "8px 8px 0 0", objectFit: "cover" }} 
                         alt={project.title}
                     />
                     }
@@ -124,6 +132,24 @@ function Home() {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // 경력 상세 내용 확장 상태
     const [showVideoModal, setShowVideoModal] = useState<boolean>(false); // 비디오 모달 표시 상태
     const [videoSource, setVideoSource] = useState<string>(""); // 현재 재생할 비디오 소스
+    // 1. 화면 가로 길이를 저장할 상태 추가
+    const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
+
+    useEffect(() => {
+        // 2. 리사이즈 이벤트를 처리할 함수
+        const handleResize = () => {
+            setExpandedIndex(null); // (선택사항) 화면 크기 변할 때 상세내용 닫기 등 응용 가능
+            setWindowWidth(window.innerWidth);
+        };
+
+        // 3. 이벤트 리스너 등록
+        window.addEventListener('resize', handleResize);
+
+        // 4. 언마운트 시 이벤트 리스너 제거 (메모리 누수 방지)
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     // 4. 데이터 배열에 타입 적용
     const career: CareerItem[] = [
@@ -293,8 +319,8 @@ function Home() {
                 "- PDF 문서 자동 다운로드 및 OCR을 통한 데이터 수집" , 
                 "- 정기 결제 기능을 구축하여 특정시간 기준으로 자동 결제 기능구축",
             ],
-            img: no, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
-            link: "", // 동영상 소스 링크 [k3]
+            img: k_6, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
+            link: "https://k-visa.ai", // 동영상 소스 링크 [k3]
             // isVideo: true, // 비디오임을 표시
         },
     ];
@@ -353,22 +379,30 @@ function Home() {
             }}
         >
             <FlexColumnStartCenter style={{ color: "black", height: "100%", width: "100%", overflow: "auto" }}>
-                <FlexColumnStartStart style={{ width: "700px", height: "100%", }}>
+                <FlexColumnStartStart style={{ width: windowWidth < 700 ? "100%" :"700px", height: "100%",
+                alignItems:windowWidth < 700 ? "center":"flex-start" 
+                 }}>
                     
                     {/* 개인 정보 섹션 */}
-                    <FlexRowStartStart style={{ width: "700px", marginTop: "150px" }}>
+                    <FlexRowStartStart style={{ width: windowWidth < 700 ? "100%" : "700px", marginTop: "150px",
+                        justifyContent:windowWidth < 700 ? "center" : "flex-start"
+                     }}>
                         <img src={main} style={{ width: "110px", borderRadius: "50%", marginRight: "20px" }} alt="프로필 이미지"/>
                         <FlexColumnCenterStart>
                             <h3 style={{ fontSize: "20px" }}>김성원</h3>
                             <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "15px" }}>풀스택 개발자</span>
-                            <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>
+                            <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px",
+                                flexDirection:windowWidth < 400 ? "column" : "row" , alignItems:windowWidth < 400 ? "flex-start" : "center"
+                             }}>
                                 <span>+82 10-8075-8012&nbsp;&nbsp;&nbsp;</span>
-                                <span>|</span>
+                                <span style={{ display:windowWidth < 400 ? "none" : "block" }}>|</span>
                                 <span>&nbsp;&nbsp;&nbsp;kimeende@naver.com</span>
                             </FlexRowAllCenter>
                         </FlexColumnCenterStart>
                     </FlexRowStartStart>
-                    <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" }}>
+                    <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" ,
+                        width:windowWidth < 700 ? "90%" : "700px"
+                     }}>
                         안녕하세요.<br />
                         6년차 개발자 김성원입니다.<br />
                         Django, Node, React 등 다양한 언어와 프레임워크를 기반으로
@@ -381,23 +415,24 @@ function Home() {
                     </FlexRowAllCenter>
 
                     {/* 경력 섹션 */}
-                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" :"100%", margin: "30px 0px", fontSize: "20px" }}>
                         <span>🚀 </span>
                         <Line>경력</Line>
                     </FlexRowBetweenCenter>
                     {career.map((item, index) => (
                         <FlexColumnCenterStart 
                             style={{
-                                border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", padding: "10px 25px", width: "95%", borderRadius: "10px",
-                                marginTop: index === 0 ? 0 : 20, marginLeft: "20px", cursor: "pointer",
+                                border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", 
+                                padding: windowWidth < 700 ? "10px" : "10px 25px", width: windowWidth < 700 ? "90%" :"95%", borderRadius: "10px",
+                                marginTop: index === 0 ? 0 : 20, marginLeft: windowWidth < 700 ? "0px" : "20px", cursor: "pointer",
                             }} 
                             key={index} 
                             onClick={() => handleToggle(index)}
                         >
                             <FlexRowBetweenCenter style={{ width: "100%" }}>
                                 <FlexRowStartStart>
-                                    <span style={{ fontSize: "15px" }}>{item.job}</span>
-                                    <img src={item.img} style={{ height: "15px", marginLeft: "10px" }} alt={`${item.job} 로고`} />
+                                    <span style={{ fontSize: "15px" , display:windowWidth < 700 ? "none" : "block" }}>{item.job}</span>
+                                    <img src={item.img} style={{ height: "15px", marginLeft: windowWidth < 700 ? "0px" :"10px" }} alt={`${item.job} 로고`} />
                                 </FlexRowStartStart>
                                 <span style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px" }}>{item.Date}</span>
                             </FlexRowBetweenCenter>
@@ -437,11 +472,17 @@ function Home() {
                     ))}
                     
                     {/* 스택 섹션 */}
-                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "30px 0px", fontSize: "20px" }}>
                         <span>🛠️ </span>
                         <Line>스택</Line>
                     </FlexRowBetweenCenter>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", marginLeft: "20px", gap: "10px", }}>
+                    <div style={{ display: windowWidth < 700 ? "flex": "grid", gridTemplateColumns: "repeat(2, 1fr)", marginLeft: windowWidth < 700 ? "0px" : "20px", gap: "10px", 
+                        width: windowWidth < 700 ? "90%" : "100%",
+                        justifyContent:windowWidth < 700 ? "center": "" ,
+                        alignItems:windowWidth < 700 ? "center": "" ,
+                        flexDirection:windowWidth < 700 ? "column": "row" ,
+                 
+                    }}>
                         {stack.map((item, index) => (
                             <FlexColumnStartStart style={{
                                 border: "2px solid rgb(229 231 235 / var(--tw-border-opacity, 1))", padding: "10px", borderRadius: "10px", width: "100%",
@@ -461,26 +502,26 @@ function Home() {
                     </div>
 
                     {/* 프로젝트 섹션 */}
-                    <FlexRowBetweenCenter style={{ width: "100%", margin: "30px 0px", fontSize: "20px" }}>
+                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" :"100%", margin: "30px 0px", fontSize: "20px" }}>
                         <span>💻 </span>
                         <Line>프로젝트</Line>
                     </FlexRowBetweenCenter>
 
                     {/* 주식회사 마켓비 */}
-                    <img src={marktet} style={{ height: "30px", margin: "0px auto 30px 20px" }} alt="마켓비 로고" />
-                    <ProjectGrid projects={marketBProjects} handleProjectClick={handleProjectClick} />
+                    <img src={marktet} style={{ height: windowWidth < 700 ? "20px" : "30px", margin: "0px auto 30px 20px" }} alt="마켓비 로고" />
+                    <ProjectGrid projects={marketBProjects} handleProjectClick={handleProjectClick} windowWidth ={windowWidth}/>
                     
                     {/* 집대장 */}
-                    <img src = {zip} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="집대장 로고" />
-                    <ProjectGrid projects={zipProjects} handleProjectClick={handleProjectClick} />
+                    <img src = {zip} style={{ height: windowWidth < 700 ? "20px" :"30px", margin: "30px auto 30px 20px" }} alt="집대장 로고" />
+                    <ProjectGrid projects={zipProjects} handleProjectClick={handleProjectClick} windowWidth ={windowWidth}/>
 
                     {/* 주식회사 어글리스톤 */}
-                    <img src = {ugly} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="어글리스톤 로고" />
-                    <ProjectGrid projects={scrapProjects} handleProjectClick={handleProjectClick} />
+                    <img src = {ugly} style={{ height: windowWidth < 700 ? "20px" :"30px", margin: "30px auto 30px 20px" }} alt="어글리스톤 로고" />
+                    <ProjectGrid projects={scrapProjects} handleProjectClick={handleProjectClick} windowWidth ={windowWidth}/>
 
                     {/* 바른행정 주식회사 */}
-                    <img src = {barun} style={{ height: "30px", margin: "30px auto 30px 20px" }} alt="바른행정 로고" />
-                    <ProjectGrid projects={barunProjects} handleProjectClick={handleProjectClick} />
+                    <img src = {barun} style={{ height: windowWidth < 700 ? "20px" :"30px", margin: "30px auto 30px 20px" }} alt="바른행정 로고" />
+                    <ProjectGrid projects={barunProjects} handleProjectClick={handleProjectClick} windowWidth ={windowWidth}/>
 
                 </FlexColumnStartStart>
             </FlexColumnStartCenter>
