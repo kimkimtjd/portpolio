@@ -285,7 +285,7 @@ function Home() {
             title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
             skills: "React , php",
             description: [
-                "- 케이비자 사이트 전체를 리뉴얼작업",
+                "- 케이비자 사이트 전체를 관리 및 수정작업기능을 구현",
                 "- 케이비자 결혼비자 셀프테스트를 구축하여 , 상담전 본인의 충족여부를 검증하도록 구현",
             ],
             img: k_3,
@@ -306,7 +306,7 @@ function Home() {
             skills: "React , Vite ,  Django",
             description: [
                 "- AWS S3 Pre-Signed URL 기술을 활용하여 동영상에 대한 보안접근 구현 및 유효 기간 설정 관리 시스템 구축.",
-                "- PG결제연동을 통한 회원가입.로그인등 각종 기능을 구현",
+                "- TossPay 결제연동을 통한 회원가입.로그인등 각종 기능을 구현",
             ],
             img: k_5,
             link: "https://www.hangsim.co.kr"
@@ -315,9 +315,11 @@ function Home() {
             title: "케이비자 AI를 개발",
             skills: "Python, Django, React",
             description: [
-                "- AI 학습을 위한 법제처 데이터 스크래핑 자동화 (Selenium)",
-                "- PDF 문서 자동 다운로드 및 OCR을 통한 데이터 수집" , 
-                "- 정기 결제 기능을 구축하여 특정시간 기준으로 자동 결제 기능구축",
+                "- AI 학습을 위한 법제처 데이터 스크래핑 및 수집 자동화 (Selenium)",
+                "- Upstage Document OCR을 서류 분석 및 대화하기 기능을 구현" , 
+                "- 질문, 답변을 통한 서류 작성 및 다운로드 기능을 구현",
+                "- OpenAI를 통한 실시간 대화하기 기능을 구현",
+                "- TossPay 결제 기능을 구축하여 정기 결제 기능구축",
             ],
             img: k_6, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
             link: "https://k-visa.ai", // 동영상 소스 링크 [k3]
