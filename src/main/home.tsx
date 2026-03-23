@@ -20,6 +20,7 @@ import k_3 from "../assets/project/k_3.png"
 import k_4 from "../assets/project/k_4.webp"
 import k_5 from "../assets/project/k_5.png"
 import k_6 from "../assets/project/k_6.png"
+import k_7 from "../assets/project/k_7.png"
 
 import no from "../assets/project/no.jpg"
 
@@ -292,7 +293,7 @@ function Home() {
             link: "https://www.k-visa.co.kr/html/F6/"
         },
         {
-            title: "케이비자 알리미 웹뷰 구축",
+            title: "케이비자 알리미 웹뷰 구축[팁스 과제용]",
             skills: "React , ReactNative , Django",
             description: [
                 "- 케이비자 알리미를 구축하여 회원들을 대상으로 비자만료기간 FCM알림 기능을 개발",
@@ -312,7 +313,7 @@ function Home() {
             link: "https://www.hangsim.co.kr"
         },
         {
-            title: "케이비자 AI를 개발",
+            title: "케이비자 AI를 개발[팁스 과제용]",
             skills: "Python, Django, React",
             description: [
                 "- AI 학습을 위한 법제처 데이터 스크래핑 및 수집 자동화 (Selenium)",
@@ -323,6 +324,17 @@ function Home() {
             ],
             img: k_6, // 이미지 대신 동영상 썸네일로 사용할 k_2를 임시 사용
             link: "https://k-visa.ai", // 동영상 소스 링크 [k3]
+            // isVideo: true, // 비디오임을 표시
+        },
+        {
+            title: "행정심판연구소 고도화를 진행",
+            skills: "Python, Django, React",
+            description: [
+                "- 고객후가를 등록할수있도록 어드민에 작업을 진행",
+                "- 고객후기 섹션 추가 및 디자인 고도화 + PC버전 디자인 작업을 진행" , 
+            ],
+            img: k_7, // 이미지 대신 동영상 썸네일로 사용할 k_2
+            link: "https://www.hangsim.co.kr"
             // isVideo: true, // 비디오임을 표시
         },
     ];
@@ -406,7 +418,7 @@ function Home() {
                         width:windowWidth < 700 ? "90%" : "700px"
                      }}>
                         안녕하세요.<br />
-                        6년차 개발자 김성원입니다.<br />
+                        2019년도부터 개발자 일을하고있는 김성원입니다.<br />
                         Django, Node, React 등 다양한 언어와 프레임워크를 기반으로
                         웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />
                         특히, 풍부하고 다양한 기술을 바탕으로
