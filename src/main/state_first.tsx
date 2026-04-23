@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import {
-    FlexRowAllCenter, FlexRowStartEnd, FlexRowEndStart, FlexColumnCenterStart, FlexColumnAllCenter
+    FlexRowAllCenter, FlexRowStartEnd, FlexRowEndStart, FlexColumnCenterStart,
 } from "../css/common";
 import { useFirstStore } from "../stores/firstStore";
 import first_link from "../assets/first/first_link.png"
@@ -12,10 +12,10 @@ import FirstAiBefore from "./first_ai_before";
 import First_Result from "./first_result";
 
 
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
+// const spin = keyframes`
+//   0% { transform: rotate(0deg); }
+//   100% { transform: rotate(360deg); }
+// `;
 
 
 function First() {

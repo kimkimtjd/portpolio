@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { FlexColumnAllCenter, FlexColumnCenterStart, FlexColumnStartCenter, FlexColumnStartStart, FlexRowAllCenter, FlexRowBetweenCenter, FlexRowCenterEnd, FlexRowCenterStart, FlexRowStartCenter, FlexRowStartStart } from "../css/common";
+import {  FlexColumnCenterStart, FlexColumnStartCenter, FlexColumnStartStart, FlexRowAllCenter, FlexRowBetweenCenter,  FlexRowCenterStart,  FlexRowStartStart } from "../css/common";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import SidaBar from "../assets/common/sidebar_back.png";
@@ -21,6 +21,9 @@ import k_4 from "../assets/project/k_4.webp"
 import k_5 from "../assets/project/k_5.png"
 import k_6 from "../assets/project/k_6.png"
 import k_7 from "../assets/project/k_7.png"
+import k_8 from "../assets/project/k_8.png"
+import k_9 from "../assets/project/k_9.png"
+import k_10 from "../assets/project/k_10.png"
 
 import no from "../assets/project/no.jpg"
 
@@ -303,16 +306,6 @@ function Home() {
             link: "https://play.google.com/store/apps/details?id=com.kvisaapp"
         },
         {
-            title: "행정심판연구소 구축",
-            skills: "React , Vite ,  Django",
-            description: [
-                "- AWS S3 Pre-Signed URL 기술을 활용하여 동영상에 대한 보안접근 구현 및 유효 기간 설정 관리 시스템 구축.",
-                "- TossPay 결제연동을 통한 회원가입.로그인등 각종 기능을 구현",
-            ],
-            img: k_5,
-            link: "https://www.hangsim.co.kr"
-        },
-        {
             title: "케이비자 AI를 개발[팁스 과제용]",
             skills: "Python, Django, React",
             description: [
@@ -327,6 +320,16 @@ function Home() {
             // isVideo: true, // 비디오임을 표시
         },
         {
+            title: "행정심판연구소 구축",
+            skills: "React , Vite ,  Django",
+            description: [
+                "- AWS S3 Pre-Signed URL 기술을 활용하여 동영상에 대한 보안접근 구현 및 유효 기간 설정 관리 시스템 구축.",
+                "- TossPay 결제연동을 통한 회원가입.로그인등 각종 기능을 구현",
+            ],
+            img: k_5,
+            link: "https://www.hangsim.co.kr"
+        },
+        {
             title: "행정심판연구소 고도화를 진행",
             skills: "Python, Django, React",
             description: [
@@ -335,6 +338,43 @@ function Home() {
             ],
             img: k_7, // 이미지 대신 동영상 썸네일로 사용할 k_2
             link: "https://www.hangsim.co.kr"
+            // isVideo: true, // 비디오임을 표시
+        },
+        {
+            title: "케이비자 어드민을 개발",
+            skills: "Python, Django, React",
+            description: [
+                "- 서비스화면에서 AI를 통한 비자분석서비스를 이용한 회원데이터를 수집 및 배너 , 블로그 , 후기등 웹사이트 관리에 대한 전반적인 업무를 진행",
+                "- 대시보드에서 일자 및 업무별 접수현황 . 진행중인업무수량등을 전반적으로볼수있도록 구현" , 
+                "- 유튜브 iframe 링크 입력 시 자동으로 썸네일 이미지를 추출 및 서버에 저장하는 로직을 구현"
+            ],
+            img: k_8, // 이미지 대신 동영상 썸네일로 사용할 k_2
+            link: ""
+            // isVideo: true, // 비디오임을 표시
+        },
+        {
+            title: "인허가클리닉 어드민을 개발",
+            skills: "Python, Django, React",
+            description: [
+                "- 서비스화면에서 AI를 통한 인허가 분석서비스를 이용한 회원데이터를 수집 및 배너 , 블로그 , 후기등 웹사이트 관리에 대한 전반적인 업무를 진행",
+                "- 대시보드에서 일자 및 업무별 접수현황 . 진행중인업무수량등을 전반적으로볼수있도록 구현" , 
+                "- 유튜브 ifram링크를 입력하면 이미지를 추출하는 로컬라이징(Localizing) 하는기능을 적용함으로써 서비스화면에서 속도문제를 해결"
+            ],
+            img: k_9, // 이미지 대신 동영상 썸네일로 사용할 k_2
+            link: ""
+            // isVideo: true, // 비디오임을 표시
+        },
+        {
+            title: "행정심판연구소 어드민을 개발",
+            skills: "Python, Django, React",
+            description: [
+                "- 결제를 한고객 및 진행상황을 직관적으로 볼수있도록 개발을 진행",
+                "- 고객별로 동영상재생시간을 볼수있도록 작업을 진행" , 
+                "- 계좌이체한 고객을 위한 어드민에서 결제완료 처리를 할수 있도록 진행" ,
+                "- 고객후기를 직접 입력 후 서비스 화면에서 볼수있도록 구현" ,
+            ],
+            img: k_10, // 이미지 대신 동영상 썸네일로 사용할 k_2
+            link: ""
             // isVideo: true, // 비디오임을 표시
         },
     ];
