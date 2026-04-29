@@ -11,7 +11,7 @@ import main from "../assets/main.jpg"
 import m_1 from "../assets/project/m_1.png"
 import m_2 from "../assets/project/m_2.png"
 import m_8 from "../assets/project/m_8.jpeg"
-import m_9 from "../assets/project/m_9.png"
+// import m_9 from "../assets/project/m_9.png"
 import zi from "../assets/project/z_1.png"
 import sc_1 from "../assets/project/sc_1.jpg"
 import sc_2 from "../assets/project/sc_2.jpeg"
@@ -23,7 +23,9 @@ import k_4 from "../assets/project/k_4.webp"
 import k_6 from "../assets/project/k_6.png"
 import k_7 from "../assets/project/k_7.png"
 import k_8 from "../assets/project/k_8.png"
-// import k_9 from "../assets/project/k_9.png"
+import k_9 from "../assets/project/k_9.png"
+import blogVideo from "../assets/blog.mp4"; // 경로 확인
+import ai from "../assets/ai.mov"
 // import k_10 from "../assets/project/k_10.png"
 
 import no from "../assets/project/no.jpg"
@@ -318,33 +320,182 @@ function Home() {
     
     // 주식회사 마켓비 프로젝트
     const marketBProjects: Project[] = [
-        { title: "위탁사 데이터분리 & 신규 웹사이트 구축", skills: "Django, Docker, Vue", description: ["팀원들과 공유 중 버전 이슈 문제 발생. Docker container 패키징 작업을 진행하여 해결", "데이터를 이전하는데 누락 문제 발생. 백업했던 데이터로 복구 후 문제 해결" , "입금내역을 1분마다 확인하여 위탁업체 적립금을 자동으로 충전하는 기능을 구축", ], img: m_1, link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954" },
-        { title: "대리점 안내 서비스 구축", skills: "Django, Vue, NaverMap", description: ["지도에 네비게이션 기능을 구현하여 지역별로 방문을 쉽게 구현", "전화번호 클릭 시 전화연결 및 주소 복사 등 편의성 기능 구현"], img: m_2, link: null },
-        { title: "각종 행사 및 기획전 작업", skills: "Django, Vue", description: ["각종 기획전 및 타이머 스크롤 등 기능 구현", "타이머를 이용한 자동화 및 이벤트지원자 취합 등 각종 기능 개발"], img: m_8, link: null },
-        { title: "Docker 기반 위탁 관리 자동화 및 부가 서비스 구축", skills: "Docker, Django, React, MySQL", description: ["Docker 컨테이너화를 통해 개발 환경을 표준화하여 팀원 간 인프라 설정 및 협업 효율성 극대화", "가상 서버 내 위탁 업체 정보, 적립금 데이터 등 핵심 비즈니스 DB 설계 및 안정적인 관리 시스템 구축", "Django와 React를 연동하여 실시간 데이터 조회 및 자동화된 관리 기능 제공"], img: m_9, link: null }
+        { 
+            title: "위탁 관리 자동화 및 전용 웹사이트 구축", 
+            skills: "Django, Docker, Vue", 
+            description: [
+                "24시간 적립금 자동 충전 시스템(실시간 입금 확인 로직) 구축으로 위탁 업체 정산 업무 자동화",
+                "Docker 컨테이너화(Packaging)를 통한 개발 환경 표준화로 팀 내 버전 충돌 이슈 100% 해결",
+                "대규모 데이터 이전 시 백업 및 정합성 검증 프로세스 리딩으로 무결성 확보"
+            ], 
+            img: m_1, 
+            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954" 
+        },
+        { 
+            title: "대리점 안내 및 길찾기 서비스", 
+            skills: "Django, Vue, NaverMap", 
+            description: [
+                "전국 대리점 위치 정보 시각화 및 지역별 방문 네비게이션 기능 연동",
+                "전화 연결, 주소 복사 등 편의 기능 최적화를 통한 오프라인 매장 접근성 강화"
+            ], 
+            img: m_2, 
+            link: null 
+        },
+        { 
+            title: "이커머스 운영 자동화 및 ERP 연동", 
+            skills: "Python, Selenium, Google API", 
+            description: [
+                "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
+                "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
+            ], 
+            img: m_8, 
+            link: null 
+        }
     ];
 
     // 집대장 프로젝트
     const zipProjects: Project[] = [
-        { title: "전원주택 및 타운하우스등 웹사이트 구축", skills: "Nodejs , React", description: ["지도부분 기능 개발에서 마커 및 길찾기 거리뷰등 다양한 기능을 개발", "360도 카메라 이미지를 활용하여 3D 스마트뷰 기능을 개발"], img: zi, link: null },
-    ]
+        { 
+            title: "전원주택 특화 매물 정보 플랫폼", 
+            skills: "Node.js, React, MySQL", 
+            description: [
+                "T-Map/Kakao Map API 연동을 통한 고도화된 위치 기반 매물 필터링 및 길찾기 시스템 구현",
+                "커스텀 마커 및 거리뷰 기능을 결합한 사용자 친화적 지도 인터페이스 개발"
+            ], 
+            img: zi, 
+            link: null 
+        },
+        { 
+            title: "360도 VR 스마트뷰 솔루션", 
+            skills: "React, Three.js", 
+            description: [
+                "360도 카메라 데이터를 활용한 웹 기반 VR 뷰어 구축으로 비대면 임장 환경 제공",
+                "부동산 특화 UX에 맞춘 3D 인터랙션 기능 구현"
+            ], 
+            img: zip , 
+            link: null 
+        }
+    ];
 
     // 주식회사 어글리스톤 프로젝트
     const scrapProjects: Project[] = [
-        { title: "스크랩마켓 웹사이트 구축", skills: "Django , React", description: ["채팅서버[NaverCloud] 메인서버[AWS] 분리작업", "채팅 . 경매 . 지도 . 명함커스텀등 다양한 기능을 구축" , "채팅에서 명함 전송시 커스텀요소가 많아 호출속도 저하문제발생 -> 커스텀한 명함을 이미지화하여 속도문제개선" , "일별 평균 거래시세를 변동시간 기준 자동으로반영되도록 작업" , ], img: sc_1, link: null },
-        { title: "스크랩마켓 웹뷰를 이용힌 앱개발", skills: "Django , ReactNative", description: ["웹에서의 전반적인기능 + AOS 위젯을 구축", "딥링크를 활용한 네비게이션기능을 구축"], img: sc_2, link: null },
-    ]
+        { 
+            title: "스크랩마켓 B2B 플랫폼 구축", 
+            skills: "Django, React, AWS, NaverCloud", 
+            description: [
+                "메인(AWS)-채팅(NaverCloud) 서버 분리 설계를 통해 대규모 트래픽 안정성 확보",
+                "명함 커스텀 전송 시 발생하는 리소스 부하를 이미지 렌더링 방식 전환으로 해결(로딩 속도 개선)",
+                "실시간 거래 시세 자동 반영 시스템 구축을 통한 플랫폼 거래 투명성 및 신뢰도 확보",
+                "채팅, 경매, 지도 기반 거래 매칭 등 비즈니스 핵심 기능 개발"
+            ], 
+            img: sc_1, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 하이브리드 앱 개발", 
+            skills: "ReactNative, Django", 
+            description: [
+                "웹뷰 기반의 효율적인 앱 배포 환경 구축 및 하이브리드 전용 기능 연동",
+                "딥링크 네비게이션 및 AOS 위젯 기능을 통한 사용자 접근성 및 재방문율 향상"
+            ], 
+            img: sc_2, 
+            link: null 
+        }
+    ];
     
     // 바른행정 주식회사 프로젝트
     const barunProjects: Project[] = [
-        { title: "행정24 플랫폼 구축", skills: "Next.js, Django", description: ["행정업무 접수 신청후 일정시간경과후 , 자동으로 업무 진행상태 변경기능을 구축", "행정법인의경우도 진행을 할수있도록 , 유저로직 분리 및 최적화 작업을 진행"], img: k_1, link: "https://www.enetnews.co.kr/news/articleView.html?idxno=34295" },
-        { title: "케이비자 파트너스 구축", skills: "Next.js, Django", description: ["LGU+, CU , 전북은행등 대기업 협업을 위한 비자 접수 서비스 플랫폼 개발 및 유지보수", "QR코드를통한 상담폼진입 -> 설문을 진행후 내부담당자배정을 통한 상담을진행" , "전북은행 브라보코리아 비자발급 기능에 웹뷰개발을 통한 협업을 진행"], img: k_2, link: "https://www.fetv.co.kr/news/article.html?no=191348" },
-        { title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발", skills: "React , php", description: ["케이비자 사이트 전체를 관리 및 수정작업기능을 구현", "케이비자 결혼비자 셀프테스트를 구축하여 , 상담전 본인의 충족여부를 검증하도록 구현",], img: k_3, link: "https://www.k-visa.co.kr/html/F6/" },
-        { title: "케이비자 알리미 웹뷰 구축[팁스 과제용]", skills: "React , ReactNative , Django", description: ["케이비자 알리미를 구축하여 회원들을 대상으로 비자만료기간 FCM알림 기능을 개발", "안드로이드에서 위젯기능을 추가하여 , 만료기간을 주기적으로 확인가능하도록 구축",], img: k_4, link: "https://play.google.com/store/apps/details?id=com.kvisaapp" },
-        { title: "케이비자 AI를 개발[팁스 과제용]", skills: "Python, Django, React", description: ["AI 학습을 위한 법제처 데이터 스크래핑 및 수집 자동화 (Selenium)", "Upstage Document OCR을 서류 분석 및 대화하기 기능을 구현" , "질문, 답변을 통한 서류 작성 및 다운로드 기능을 구현", "OpenAI를 통한 실시간 대화하기 기능을 구현", "TossPay 결제 기능을 구축하여 정기 결제 기능구축",], img: k_6, link: "https://k-visa.ai", },
-        { title: "행정심판연구소 구축 및 고도화를 진행", skills: "React , Vite ,  Django", description: ["AWS S3 Pre-Signed URL 기술을 활용하여 동영상에 대한 보안접근 구현 및 유효 기간 설정 관리 시스템 구축.", "TossPay 결제연동을 통한 회원가입.로그인등 각종 기능을 구현", "고객후가를 등록할수있도록 어드민에 작업을 진행", "고객후기 섹션 추가 및 디자인 고도화 + PC버전 디자인 작업을 진행" ,], img: k_7, link: "https://www.hangsim.co.kr" },
-        // { title: "행정심판연구소 고도화를 진행", skills: "Python, Django, React", description: [ ], img: k_7, link: "https://www.hangsim.co.kr" },
-        { title: "케이비자 . 행정심판연구소 . 인허가클리닉 어드민을 개발", skills: "Python, Django, React", description: ["서비스화면에서 AI를 통한 비자 . 인허가분석서비스를 이용한 회원데이터를 수집 및 배너 , 블로그 , 후기등 웹사이트 관리에 대한 전반적인 업무를 진행 [인허가클리닉 . 케이비자]", "대시보드에서 일자 및 업무별 접수현황 . 진행중인업무수량등을 전반적으로볼수있도록 구현 [인허가클리닉 . 케이비자]" , "유튜브 iframe 링크 입력 시 자동으로 썸네일 이미지를 추출 및 서버에 저장하는 로직을 구현 [인허가클리닉 . 케이비자]", "결제를 한고객 및 진행상황을 직관적으로 볼수있도록 개발을 진행 [행정심판연구소]", "고객별로 동영상재생시간을 볼수있도록 작업을 진행 [행정심판연구소]" , "계좌이체한 고객을 위한 어드민에서 결제완료 처리를 할수 있도록 진행 [행정심판연구소]" , "고객후기를 직접 입력 후 서비스 화면에서 볼수있도록 구현 [행정심판연구소]" ,], img: k_8, link: "" },
+        { 
+            title: "행정24 양방향 매칭 플랫폼", 
+            skills: "Next.js, Django", 
+            description: [
+                "의뢰인-행정사 실시간 매칭 알고리즘 및 단계별 업무 진행 상태 자동 변경 로직 구축",
+                "개인/법인 사용자별 로직 분리 및 인가 시스템 최적화로 대규모 사용자 수용 기반 마련",
+                "Solapi 연동을 통한 실시간 카카오 알림톡 알림 기능 구현"
+            ], 
+            img: k_1, 
+            link: "https://www.enetnews.co.kr/news/articleView.html?idxno=34295" 
+        },
+        { 
+            title: "대기업 협업 비자 접수 플랫폼 [파트너스]", 
+            skills: "Next.js, Django", 
+            description: [
+                "전북은행(브라보코리아), LGU+, CU 등 대기업 채널 연동을 위한 전용 비자 접수 플랫폼 개발",
+                "QR 기반 상담 설문 폼 및 내부 담당자 배정 자동화 로직으로 고객 응대 프로세스 단축",
+                "대기업 인프라와의 안정적인 연동을 위한 API 인터페이스 설계 및 유지보수"
+            ], 
+            img: k_2, 
+            link: "https://www.fetv.co.kr/news/article.html?no=191348" 
+        },
+        { 
+            title: "결혼비자 셀프테스트 및 사이트 리뉴얼", 
+            skills: "React, PHP", 
+            description: [
+                "결혼비자 자격 충족 여부를 즉시 검증하는 셀프 진단 테스트 구축으로 상담 효율성 증대",
+                "서비스 전체 관리 기능 고도화 및 UI 리뉴얼을 통한 사용자 이탈률 감소"
+            ], 
+            img: k_3, 
+            link: "https://www.k-visa.co.kr/html/F6/" 
+        },
+        { 
+            title: "케이비자 알리미 및 위젯 (App)", 
+            skills: "React Native, Django", 
+            description: [
+                "비자 만료 기간 자동 감지 및 FCM 알림 발송 시스템 구축으로 사용자 리텐션 강화",
+                "안드로이드 위젯 기능을 개발하여 앱 진입 없이도 실시간 만료 정보 확인 환경 제공",
+                "Store 배포 및 하이브리드 앱 환경 최적화 수행"
+            ], 
+            img: k_4, 
+            link: "https://play.google.com/store/apps/details?id=com.kvisaapp" 
+        },
+        { 
+            title: "케이비자 AI & RAG 시스템 개발 [TIPS 과제]", 
+            skills: "Python, Django, OpenAI, Upstage OCR", 
+            description: [
+                "Claude Api 및 OpenSearch 기반 RAG 시스템 구축으로 법률 상담 답변의 신뢰성 확보",
+                "Upstage OCR을 활용한 행정 서류 자동 분석 및 맞춤형 서류 작성 가이드 자동화",
+                "Selenium 기반 법령 데이터 스크래핑 파이프라인 구축으로 AI 학습 데이터 수집 자동화",
+                "TossPay 정기 결제 시스템 연동을 통한 유료 구독 모델 수익 구조 마련"
+            ], 
+            img: k_6, 
+            link: ai ,
+            isVideo: true 
+        },
+        { 
+            title: "행정심판연구소 보안 강의 플랫폼 고도화", 
+            skills: "React, Vite, Django, AWS S3", 
+            description: [
+                "AWS S3 Pre-Signed URL 기술을 적용하여 유료 강의 콘텐츠 무단 복제 방지 보안 체계 구축",
+                "TossPay 결제 모듈 연동 및 사용자 권한별 강의 접근 제어 시스템 구현",
+                "고객 후기 관리 시스템 및 PC/모바일 반응형 UI 고도화로 서비스 전환율 개선"
+            ], 
+            img: k_7, 
+            link: "https://www.hangsim.co.kr" 
+        }, 
+        { 
+            title: "통합 관리자(Admin) 시스템 및 대시보드 구축", 
+            skills: "Python, Django, React", 
+            description: [
+                "인허가클리닉·케이비자·행정심판 등 3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상",
+                "일자별 접수 현황 및 업무량 실시간 시각화 대시보드를 통한 데이터 기반 의사결정 지원",
+                "유튜브 API 로컬라이징 로직(썸네일 자동 추출 및 서버 저장)을 구현하여 메인 로딩 속도 최적화",
+                "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현"
+            ], 
+            img: k_8, 
+            link: "" 
+        },
+        { 
+            title: "블로그 자동작성", 
+            skills: "Python, Selenium , Claude api", 
+            description: [
+                "Selenium 기반 네이버 등 블로그 플랫폼 포스팅 자동화 봇 구축",
+                "Claude API를 연동하여 키워드 기반 맞춤형 정보성 콘텐츠 자동 생성 로직 구현",
+                "이미지 자동 검색 및 삽입 알고리즘을 통한 포스팅 퀄리티 향상 및 작업 시간 90% 단축",
+            ], 
+            img: k_9, // 적절한 이미지 변수로 교체 가능
+            link: blogVideo, // 실제 mp4 파일 경로로 수정하세요
+            isVideo: true 
+        },
     ];
 
     const handleToggle = (index: number | null) => {
