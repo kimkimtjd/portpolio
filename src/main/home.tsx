@@ -10,12 +10,12 @@ import barun from "../assets/logo/barun.webp"
 import main from "../assets/main.jpg"
 import m_1 from "../assets/project/m_1.png"
 import m_2 from "../assets/project/m_2.png"
-import m_8 from "../assets/project/m_8.jpeg"
+import m_9 from "../assets/project/m_9.png"
 // import m_9 from "../assets/project/m_9.png"
 import zi from "../assets/project/z_1.png"
 import sc_1 from "../assets/project/sc_1.jpg"
 import sc_2 from "../assets/project/sc_2.jpeg"
-import k_1 from "../assets/project/k_1.png"
+// import k_1 from "../assets/project/k_1.png"
 import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
 import k_4 from "../assets/project/k_4.webp"
@@ -24,7 +24,7 @@ import k_6 from "../assets/project/k_6.png"
 import k_7 from "../assets/project/k_7.png"
 import k_8 from "../assets/project/k_8.png"
 import k_9 from "../assets/project/k_9.png"
-import blogVideo from "../assets/blog.mp4"; // 경로 확인
+import blogVideo from "../assets/blog.mov"; // 경로 확인
 import ai from "../assets/ai.mov"
 // import k_10 from "../assets/project/k_10.png"
 
@@ -348,7 +348,7 @@ function Home() {
                 "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
                 "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
             ], 
-            img: m_8, 
+            img: m_9, 
             link: null 
         }
     ];
@@ -405,17 +405,6 @@ function Home() {
     
     // 바른행정 주식회사 프로젝트
     const barunProjects: Project[] = [
-        { 
-            title: "행정24 양방향 매칭 플랫폼", 
-            skills: "Next.js, Django", 
-            description: [
-                "의뢰인-행정사 실시간 매칭 알고리즘 및 단계별 업무 진행 상태 자동 변경 로직 구축",
-                "개인/법인 사용자별 로직 분리 및 인가 시스템 최적화로 대규모 사용자 수용 기반 마련",
-                "Solapi 연동을 통한 실시간 카카오 알림톡 알림 기능 구현"
-            ], 
-            img: k_1, 
-            link: "https://www.enetnews.co.kr/news/articleView.html?idxno=34295" 
-        },
         { 
             title: "대기업 협업 비자 접수 플랫폼 [파트너스]", 
             skills: "Next.js, Django", 
