@@ -24,8 +24,12 @@ import k_6 from "../assets/project/k_6.png"
 import k_7 from "../assets/project/k_7.png"
 import k_8 from "../assets/project/k_8.png"
 import k_9 from "../assets/project/k_9.png"
+import k_10 from "../assets/project/k_10.png"
 import blogVideo from "../assets/blog.mov"; // 경로 확인
 import ai from "../assets/ai.mov"
+
+import visa_analyze from "../assets/visa_analyze.mp4"
+
 // import k_10 from "../assets/project/k_10.png"
 
 import no from "../assets/project/no.jpg"
@@ -303,10 +307,14 @@ function Home() {
     }, []);
 
     const career: CareerItem[] = [
-        { job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업", img: barun, text: "Django를 이용한 API 생성 및 기능구현등\nNext.js를 활용하여 행정24 플랫폼을 개발하고 amplify통해 배포를 진행\nphp를 활용한, 케이비자 행정사무소 CRM 및 Next.js, Django를 활용하여 어드민 사이트를 개발\nNext js , DJango를 활용하여  케이비자 파트너스라는 비자 접수 서비스를 개발 및 유지보수\n케이비자 파트너스라는 플랫폼을 통해 다양한 대기업 [전북은행, LGU+, Cu]와 협업을 진행\nAWS-Bedrock을 이용하여 케이비자 AI 개발 및  비자24와 접목하여, 비자 관련 서비스 업무를 확장\n" + "Selenium을 활용하여 데이터 학습을 위한 법제처 스크롤링 및 pdf파일을 다운로드\nAWS OpenSearchService를 이용하여 RAG시스템을 통한 할루시네이션 감소" },
-        { job: "주식회사 어글리스톤", Date: "2022.01 - 2024.11 . 2년 10개월", intro: "리사이클 업계의 불공정한 거래를 해결하고 투명한 거래를 위한 플랫폼", img: ugly, text: "Django를 이용한 API 생성 및 기능구현등\nReact.ts를 활용하여 스크랩마켓 웹뷰를 AWS Beanstalk통해 배포를 진행 \nReact와 ReactNative를 이용한 웹뷰 및 앱개발 완료\n채팅부분 서버 분리를 위해 Nest.js를 이용하여 작업 및 유지보수\n[메인서버 - AWS , 채팅서버(socket) - NaverCloud]\n네이버 api, 카카오 api를 활용한 지도 및 기타 기능등 전반적인 업무 진행\n위의 기능들을 활용한 전반적인 앱 개발 업무 및\n회원가입,로그인,채팅,필터링, 푸시알림 , 지도등 전반적인업무진행" },
-        { job: "집대장", Date: "2021.12 - 2022.01 ‧ 2개월", intro: "전원주택 타운하우스 한옥등 주택을 거래하는 플랫폼", img: zip, text: "React js와 node js, express를 활용한 전체적인 업무 진행\nAWS EC2와 도메인을 연결,\nAWS RDS 기반의 MySQL DB 구축 및 최적화된 데이터 모델링 수행\nT Map, kakao Map등 다양한 지도 api, 를 활용한, 위치기반 매물정보 기능 구현\n위의 기능들을 활용한 전반적인 퍼블리싱 업무 및\n회원가입,로그인 기능을 구현" },
-        { job: "주식회사마켓비", Date: "2019.12 - 2021.11 ‧ 2년", intro: "가성비 높은 가구와 인테리어 소품을 판매하는 온라인 쇼핑몰", img: marktet, text: "Html,css,js, Vue js 를 활용하여 행사및 각종기획전등 사이트 전반적인 수정업무 진행\nDocker Container안에 Django를 배포하여 DB연동및 이벤트 지원자 취합을 위한, 모델을 생성하여 관리\nCafe24 가상서버 접속후 Google Triger를 활용하여 Google sheet 자동화를 진행\nCafe24 API를 이용하여 매출및 판매기록등 DB를 구글시트로 작성\n개발이외에 추가적인 근태관리 및 소비자환불등 기타 업무등을 진행" },
+        { job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업", img: barun, 
+            text: "1. 웹 프론트엔드 개발 및 UI/UX 유지보수\n2. 백엔드 시스템 구축 및 데이터 관리\n3. 플레이스토어 및 앱스토어 배포 및 약관등 관리\n4. AI관련 데이터 정리 및 TIPS 과제 관리\n5. 블로그 자동작성 및 데이터 스크래핑등 부가적인 자동화업무" },
+        { job: "주식회사 어글리스톤", Date: "2022.01 - 2024.11 . 2년 10개월", intro: "리사이클 업계의 불공정한 거래를 해결하고 투명한 거래를 위한 플랫폼", img: ugly, 
+            text: "1. 웹 프론트엔드 개발 및 UI/UX 유지보수\n2. 백엔드 시스템 구축 및 데이터 관리\n3. 플레이스토어 배포 및 약관등 관리" },
+        { job: "집대장", Date: "2021.12 - 2022.01 ‧ 2개월", intro: "전원주택 타운하우스 한옥등 주택을 거래하는 플랫폼", img: zip, 
+            text: "1. 웹 프론트엔드 개발 및 UI/UX 유지보수\n2. 백엔드 시스템 구축 및 데이터 관리" },
+        { job: "주식회사마켓비", Date: "2019.12 - 2021.11 ‧ 2년", intro: "가성비 높은 가구와 인테리어 소품을 판매하는 온라인 쇼핑몰", img: marktet, 
+            text: "1. 웹 프론트엔드 개발 및 UI/UX 유지보수\n2. 백엔드 시스템 구축 및 데이터 관리\n3. 업무 프로세스 자동화 및 인프라 운영\n4. 운영 지원 및 비즈니스 로직 관리\n5. CS/환불 로직 대응: 소비자 환불 등 플랫폼 운영 과정에서 발생하는 기술적·행정적 이슈 해결 및 운영 지원." },
     ];
 
     const stack: StackItem[] = [
@@ -407,6 +415,16 @@ function Home() {
     
     // 바른행정 주식회사 프로젝트
     const barunProjects: Project[] = [
+        {
+            title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
+            skills: "React , php",
+            description: [
+                "결혼비자(F-6) 발급 요건 충족 여부를 실시간으로 판별하는 자가 진단(Self-Test) 엔진 설계 및 구축",
+                "상담 전 사전 검증 단계를 도입하여 부적합 상담 문의율을 감소시키고 전문 행정사 업무 효율성 제고",
+            ],
+            img: k_3,
+            link: ""
+        },
         { 
             title: "대기업 협업 비자 접수 플랫폼 [파트너스]", 
             skills: "Next.js, Django", 
@@ -458,13 +476,25 @@ function Home() {
             title: "통합 관리자(Admin) 시스템 및 대시보드 구축", 
             skills: "Python, Django, React", 
             description: [
-                "인허가클리닉·케이비자·행정심판 등 3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상",
-                "일자별 접수 현황 및 업무량 실시간 시각화 대시보드를 통한 데이터 기반 의사결정 지원",
-                "유튜브 API 로컬라이징 로직(썸네일 자동 추출 및 서버 저장)을 구현하여 메인 로딩 속도 최적화",
-                "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현"
+                "사업성장파트너·케이비자·행정심판 등 3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상 - 케이비자,사업성장파트너",
+                "일자별 접수 현황 및 업무량 실시간 시각화 대시보드를 통한 데이터 기반 의사결정 지원 - 케이비자,사업성장파트너",
+                "유튜브 API 로컬라이징 로직(썸네일 자동 추출 및 서버 저장)을 구현하여 메인 로딩 속도 최적화 - 행정심판연구소",
+                "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현 - 행정심판연구소"
             ], 
             img: k_8, 
             link: "" 
+        },
+        { 
+            title: "AI 비자 자동분석서비스 구축", 
+            skills: "React , Django , Python", 
+            description: [
+                "Claude API(LLM)와 내부 행정 데이터를 결합하여 사용자 맞춤형 비자 발급 가능성 예측 모델 구축",
+                "수만 건의 비자 성공/실패 사례 데이터를 컨텍스트로 활용하여 AI 답변의 정확도 및 신뢰성 확보",
+                "복잡한 법률 용어로 구성된 비자 요건을 사용자 친화적인 자연어 피드백으로 변환하여 제공",
+            ], 
+            img: k_10, // 적절한 이미지 변수로 교체 가능
+            link: visa_analyze, // 실제 mp4 파일 경로로 수정하세요
+            isVideo: true 
         },
         { 
             title: "블로그 자동작성", 
