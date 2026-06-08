@@ -612,9 +612,15 @@ function Home() {
                             </FlexRowAllCenter>
                         </FlexColumnCenterStart>
                     </FlexRowStartStart>
-                    <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px" , width:windowWidth < 700 ? "90%" : "700px" }}>
-                        안녕하세요.<br />2019년도부터 개발자 일을하고있는 김성원입니다.<br />Django, Node, React 등 다양한 언어와 프레임워크를 기반으로 웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />특히, 풍부하고 다양한 기술을 바탕으로 회사 내부 인원과 서비스를 이용하는 회원들에게 혁신적인 솔루션을 제공한 경험이 있습니다.<br />새로운 기능 개발에 두려워하지 않고 끊임없이 성장하며 다양한 프로젝트에 기여하고 싶습니다.<br />감사합니다.
-                    </FlexRowAllCenter>
+                    <FlexRowAllCenter style={{ color: "rgb(75 85 99/var(--tw-text-opacity,1))", fontSize: "13px", marginTop: "20px", width: windowWidth < 700 ? "90%" : "700px" }}>
+    안녕하세요.<br />
+    2019년도부터 개발자로 일하고 있는 김성원입니다.<br />
+    Django, Node, React 등 다양한 언어와 프레임워크를 기반으로 웹/앱 개발 및 자동화 등 다양한 개발 업무를 진행했습니다.<br />
+    특히, 풍부하고 다양한 기술을 바탕으로 회사 내부 인원과 서비스를 이용하는 회원들에게 혁신적인 솔루션을 제공한 경험이 있습니다.<br />
+    최근에는 Claude API, OpenAI, RAG 시스템 등 AI 기술을 실무에 적극 도입하여 비자 자동 분석, 법률 상담 챗봇, 블로그 자동 생성 등 다양한 AI 기반 서비스를 개발한 경험이 있습니다.<br />
+    새로운 기능 개발에 두려워하지 않고 끊임없이 성장하며 다양한 프로젝트에 기여하고 싶습니다.<br />
+    감사합니다.
+</FlexRowAllCenter>
 
                     {/* 경력 섹션 (유지) */}
                     <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" :"100%", margin: "30px 0px", fontSize: "20px" }}>
