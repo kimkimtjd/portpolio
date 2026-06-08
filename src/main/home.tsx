@@ -14,8 +14,12 @@ import m_9 from "../assets/project/m_9.png"
 // import m_9 from "../assets/project/m_9.png"
 import zi from "../assets/project/z_1.png"
 import sc_1 from "../assets/project/sc_1.jpg"
-import sc_2 from "../assets/project/sc_2.jpeg"
-// import k_1 from "../assets/project/k_1.png"
+import sc_2 from "../assets/project/sc_2.jpg"
+import sc_3 from "../assets/project/sc_3.jpg"
+import sc_4 from "../assets/project/sc_4.jpg"
+import sc_5 from "../assets/project/sc_5.jpg"
+
+import k_1 from "../assets/project/k_1.png"
 import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
 import k_4 from "../assets/project/k_4.webp"
@@ -400,21 +404,72 @@ function Home() {
             link: null 
         },
         { 
-            title: "스크랩마켓 하이브리드 앱 개발", 
+            title: "스크랩마켓 앱 구현", 
             skills: "ReactNative, Django", 
             description: [
-                "WebView 기반 아키텍처를 설계하여 웹-앱 간의 원활한 리소스 공유 및 배포 효율성 극대화",
-                "Bridge 기술을 활용한 하이브리드 전용 기능 연동 및 사용자 경험 고도화" ,
-                "AOS 위젯 기능을 활용해 앱을 실행하지 않고도 고철 시세를 실시간 모니터링할 수 있는 시스템 구축",
-                "DeepLink 네비게이션 설계를 통해 특정 서비스로의 접근성을 높이고 사용자 재방문 지표 개선"
+                "WebView 기반 아키텍처 설계를 통한 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
+                "Bridge 기술을 활용한 하이브리드 전용 기능 연동 및 사용자 경험 고도화",
+                "DeepLink 네비게이션 설계를 통해 특정 서비스 접근성 향상 및 사용자 재방문 지표 개선"
+            ], 
+            img: ugly, 
+            link: null 
+        },
+        { 
+            title: "리사이클재료 실시간 시세 위젯 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "AOS 위젯을 활용해 앱 실행 없이 고철 시세를 실시간으로 확인할 수 있는 모니터링 시스템 구축",
             ], 
             img: sc_2, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 앱 실시간 시세 화면 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "비철·희귀금속 실시간 시세 데이터를 자동 반영하여 최신 거래 정보 제공",
+                "전일 대비·전월 대비 등락률을 시각적으로 표시하여 사용자 데이터 가독성 향상",
+            ], 
+            img: sc_3, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 웹뷰 기반 실시간 매물 지도 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "WebView 기반 지도 화면을 앱에 연동하여 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
+                "현재 위치 기반 반경 내 매물을 실시간으로 표시하여 거래 매칭 접근성 향상",
+                "필터 기능을 통해 원하는 조건의 매물만 선별하여 사용자 탐색 경험 개선"
+            ], 
+            img: sc_4, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 웹뷰 기반 실시간 채팅 및 FCM 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "WebView 기반 채팅 화면을 앱에 연동하여 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
+                "Bridge 기술을 활용해 FCM 푸시 알림 수신 등 네이티브 기능과 웹뷰 간 연동 구현",
+                "명함 정보 커스텀 전송 기능을 통한 B2B 거래 상대방 신뢰도 확인 및 사용자 경험 개선"
+            ], 
+            img: sc_5, 
             link: null 
         }
     ];
     
     // 바른행정 주식회사 프로젝트
     const barunProjects: Project[] = [
+        {
+            title: "행정24 플랫폼 구축 [TIPS 과제]",
+            skills: "React, Django",
+            description: [
+                "행정사와 의뢰인을 연결하는 양방향 매칭 플랫폼 설계 및 개발",
+                "설문 기반 클러스터링 알고리즘을 활용한 의뢰인 맞춤형 행정사 추천 기능 구현",
+                "카카오톡 알림톡 API 연동을 통해 행정사 업무 진행 현황을 의뢰인에게 실시간 푸시 알림 제공",
+            ],
+            img: k_1,
+            link: null
+        },
         {
             title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
             skills: "React , php",
@@ -423,7 +478,7 @@ function Home() {
                 "상담 전 사전 검증 단계를 도입하여 부적합 상담 문의율을 감소시키고 전문 행정사 업무 효율성 제고",
             ],
             img: k_3,
-            link: ""
+            link: null
         },
         { 
             title: "대기업 협업 비자 접수 플랫폼 [파트너스]", 
