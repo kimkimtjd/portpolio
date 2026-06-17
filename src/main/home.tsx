@@ -38,7 +38,6 @@ interface Project {
     img: string;
     link: string | null;
     isVideo?: boolean;
-    companyLogo?: string;
 }
 
 interface CareerItem {
@@ -60,37 +59,7 @@ interface ProjectGridProps {
     windowWidth:number;
 }
 
-const TabContainer = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 700px;
-  background-color: #f1f5f9;
-  padding: 5px;
-  border-radius: 12px;
-  margin: 20px auto 30px;
-`;
-
-const TabButton = styled.button<{ $isActive: boolean }>`
-  flex: 1;
-  padding: 12px 8px;
-  border: none;
-  background: ${props => props.$isActive ? "white" : "transparent"};
-  color: ${props => props.$isActive ? "#1e293b" : "#64748b"};
-  font-weight: ${props => props.$isActive ? "700" : "500"};
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: ${props => props.$isActive ? "0 2px 4px rgba(0,0,0,0.05)" : "none"};
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-
-  &:hover {
-    color: #1e293b;
-  }
-`;
+type ProjectTab = "웹앱" | "자동화" | "AI";
 
 const GridContainer = styled.div<{ $windowWidth: number }>`
   display: ${props => props.$windowWidth < 700 ? "flex" : "grid"};
@@ -176,27 +145,12 @@ const CardContent = styled.div`
   flex-grow: 1;
 `;
 
-const ProjectHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
-
 const ProjectTitle = styled.h3`
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: #1a1a1a;
-  margin: 0;
+  margin: 0 0 10px 0;
   line-height: 1.4;
-`;
-
-const CompanyLogoMini = styled.img`
-  height: 14px;
-  object-fit: contain;
-  opacity: 0.7;
-  margin-top: 4px;
 `;
 
 const SkillTagContainer = styled.div`
@@ -254,6 +208,37 @@ const ActionLink = styled.div<{ $isVideo: boolean }>`
   }
 `;
 
+// 탭 관련 스타일
+const TabContainer = styled.div<{ $windowWidth: number }>`
+  display: flex;
+  gap: 8px;
+  margin-left: ${props => props.$windowWidth < 700 ? "0px" : "20px"};
+  margin-bottom: 28px;
+  width: ${props => props.$windowWidth < 700 ? "90%" : "100%"};
+`;
+
+const TabButton = styled.button<{ $active: boolean }>`
+  padding: 8px 22px;
+  border-radius: 20px;
+  border: 2px solid ${props => props.$active ? "#1a1a1a" : "rgb(229 231 235)"};
+  background: ${props => props.$active ? "#1a1a1a" : "white"};
+  color: ${props => props.$active ? "white" : "rgb(75 85 99)"};
+  font-size: 14px;
+  font-weight: ${props => props.$active ? "700" : "500"};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #1a1a1a;
+    color: ${props => props.$active ? "white" : "#1a1a1a"};
+  }
+`;
+
+const CompanySection = styled.div`
+  width: 100%;
+  margin-bottom: 50px;
+`;
+
 const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick , windowWidth }) => (
     <GridContainer $windowWidth={windowWidth}>
         {projects.map((project: Project, index: number) => {
@@ -267,10 +252,6 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
                     $windowWidth={windowWidth}
                     onClick={() => handleProjectClick(project.link, project.isVideo)}
                     layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
                 >
                     <ImageWrapper>
                         {project.img === no ? (
@@ -291,12 +272,7 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
                     </ImageWrapper>
 
                     <CardContent>
-                        <ProjectHeader>
-                            <ProjectTitle>{project.title}</ProjectTitle>
-                            {project.companyLogo && (
-                                <CompanyLogoMini src={project.companyLogo} alt="소속 회사" />
-                            )}
-                        </ProjectHeader>
+                        <ProjectTitle>{project.title}</ProjectTitle>
                         <SkillTagContainer>
                             {skillArray.map(skill => (
                                 <SkillTag key={skill}>{skill}</SkillTag>
@@ -321,14 +297,12 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick 
     </GridContainer>
 );
 
-type ProjectTab = 'ai' | 'automation' | 'webapp';
-
 function Home() {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null); 
     const [showVideoModal, setShowVideoModal] = useState<boolean>(false); 
     const [videoSource, setVideoSource] = useState<string>(""); 
     const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
-    const [activeTab, setActiveTab] = useState<ProjectTab>('ai');
+    const [activeTab, setActiveTab] = useState<ProjectTab>("웹앱");
 
     useEffect(() => {
         const handleResize = () => {
@@ -357,54 +331,12 @@ function Home() {
         { title: "FrontEnd", data: ["Next js", "React js", "Zustand", "Redux", "ReactNative", "Styled-Components"] },
         { title: "BackEnd", data: ["Node js", "Socket io", "Docker", "Django", "PostgreSQL", "MySQL"] },
         { title: "Cloud", data: ["AWS", "NaverCloud", "Vercel"] },
-        { title: "AI", data: ["Claude API", "OpenAI", "AWS-Bedrock", "OpenSearch", "RAG"] }, 
-        { title: "Etc", data: ["Selenium", "Pandas", "openpyxl", "LLM"] }, 
+        { title: "AI", data: ["Claude API", "OpenAI", "AWS-Bedrock", "OpenSearch", "RAG"] },
+        { title: "Etc", data: ["Selenium", "Pandas", "openpyxl", "LLM"] },
     ];
 
-    const aiProjects: Project[] = [
-        { 
-            title: "케이비자 AI & RAG 시스템 개발 [TIPS 과제]", 
-            skills: "Python, Django, OpenAI, Upstage OCR, OpenSearch", 
-            description: [
-                "Claude API 및 OpenSearch 기반 RAG 시스템 구축으로 법률 상담 답변의 신뢰성 확보",
-                "Upstage OCR을 활용한 행정 서류 자동 분석 및 맞춤형 서류 작성 가이드 자동화",
-                "Selenium 기반 법령 데이터 스크래핑 파이프라인 구축으로 AI 학습 데이터 수집 자동화",
-                "TossPay 정기 결제 시스템 연동을 통한 유료 구독 모델 수익 구조 마련"
-            ], 
-            img: k_6, 
-            link: ai,
-            isVideo: true,
-            companyLogo: barun
-        },
-        { 
-            title: "AI 비자 자동분석서비스 구축", 
-            skills: "React, Django, Python, Claude API", 
-            description: [
-                "Claude API(LLM)와 내부 행정 데이터를 결합하여 사용자 맞춤형 비자 발급 가능성 예측 모델 구축",
-                "수만 건의 비자 성공/실패 사례 데이터를 컨텍스트로 활용하여 AI 답변의 정확도 및 신뢰성 확보",
-                "복잡한 법률 용어로 구성된 비자 요건을 사용자 친화적인 자연어 피드백으로 변환하여 제공",
-            ], 
-            img: k_10,
-            link: visa_analyze,
-            isVideo: true,
-            companyLogo: barun
-        },
-    ];
-
-    const automationProjects: Project[] = [
-        { 
-            title: "블로그 자동작성 시스템", 
-            skills: "Python, Selenium, Claude API", 
-            description: [
-                "Selenium 기반 네이버 등 블로그 플랫폼 포스팅 자동화 봇 구축",
-                "Claude API를 연동하여 키워드 기반 맞춤형 정보성 콘텐츠 자동 생성 로직 구현",
-                "이미지 자동 검색 및 삽입 알고리즘을 통한 포스팅 퀄리티 향상 및 작업 시간 90% 단축",
-            ], 
-            img: k_9,
-            link: blogVideo,
-            isVideo: true,
-            companyLogo: barun
-        },
+    // ── 웹앱 탭 ──────────────────────────────────────────────
+    const webMarketBProjects: Project[] = [
         { 
             title: "위탁 관리 자동화 및 전용 웹사이트 구축", 
             skills: "Django, Docker, Vue", 
@@ -414,25 +346,8 @@ function Home() {
                 "대규모 데이터 이전 시 백업 및 정합성 검증 프로세스 리딩으로 무결성 확보"
             ], 
             img: m_1, 
-            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954",
-            companyLogo: marktet
+            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954" 
         },
-        { 
-            title: "이커머스 운영 자동화 및 ERP 연동", 
-            skills: "Python, Selenium, Google API", 
-            description: [
-                "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
-                "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
-            ], 
-            img: m_9, 
-            link: null,
-            companyLogo: marktet
-        }
-    ];
-
-    // ✅ 사용자가 요청한 순서로 정렬 완료 (마켓비 ➔ 집대장 ➔ 어글리스톤 ➔ 케이비자)
-    const webAppProjects: Project[] = [
-        // 1. 마켓비 관련 프로젝트
         { 
             title: "대리점 안내 및 길찾기 서비스", 
             skills: "Django, Vue, NaverMap", 
@@ -441,11 +356,11 @@ function Home() {
                 "전화 연결, 주소 복사 등 편의 기능 최적화를 통한 오프라인 매장 접근성 강화"
             ], 
             img: m_2, 
-            link: null,
-            companyLogo: marktet
+            link: null 
         },
+    ];
 
-        // 2. 집대장 관련 프로젝트
+    const webZipProjects: Project[] = [
         { 
             title: "전원주택 특화 매물 정보 플랫폼", 
             skills: "Node.js, React, MySQL", 
@@ -454,8 +369,7 @@ function Home() {
                 "커스텀 마커 및 거리뷰 기능을 결합한 사용자 친화적 지도 인터페이스 개발"
             ], 
             img: zi, 
-            link: null,
-            companyLogo: zip
+            link: null 
         },
         { 
             title: "360도 VR 스마트뷰 솔루션", 
@@ -465,11 +379,11 @@ function Home() {
                 "부동산 특화 UX에 맞춘 3D 인터랙션 기능 구현"
             ], 
             img: zip, 
-            link: null,
-            companyLogo: zip
-        },
+            link: null 
+        }
+    ];
 
-        // 3. 어글리스톤(스크랩마켓) 관련 프로젝트
+    const webScrapProjects: Project[] = [
         { 
             title: "스크랩마켓 B2B 플랫폼 구축", 
             skills: "Django, React, AWS, NaverCloud", 
@@ -480,11 +394,10 @@ function Home() {
                 "채팅, 경매, 지도 기반 거래 매칭 등 비즈니스 핵심 기능 개발"
             ], 
             img: sc_1, 
-            link: null,
-            companyLogo: ugly
+            link: null 
         },
         { 
-            title: "스크랩마켓 앱 구현 (하이브리드)", 
+            title: "스크랩마켓 앱 구현", 
             skills: "ReactNative, Django", 
             description: [
                 "WebView 기반 아키텍처 설계를 통한 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
@@ -492,23 +405,52 @@ function Home() {
                 "DeepLink 네비게이션 설계를 통해 특정 서비스 접근성 향상 및 사용자 재방문 지표 개선"
             ], 
             img: ugly, 
-            link: null,
-            companyLogo: ugly
+            link: null 
         },
         { 
-            title: "스크랩마켓 웹뷰 기반 실시간 매물 지도 & 채팅", 
+            title: "리사이클재료 실시간 시세 위젯 구현", 
             skills: "ReactNative, Django", 
             description: [
+                "AOS 위젯을 활용해 앱 실행 없이 고철 시세를 실시간으로 확인할 수 있는 모니터링 시스템 구축",
+            ], 
+            img: sc_2, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 앱 실시간 시세 화면 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "비철·희귀금속 실시간 시세 데이터를 자동 반영하여 최신 거래 정보 제공",
+                "전일 대비·전월 대비 등락률을 시각적으로 표시하여 사용자 데이터 가독성 향상",
+            ], 
+            img: sc_3, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 웹뷰 기반 실시간 매물 지도 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "WebView 기반 지도 화면을 앱에 연동하여 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
                 "현재 위치 기반 반경 내 매물을 실시간으로 표시하여 거래 매칭 접근성 향상",
+                "필터 기능을 통해 원하는 조건의 매물만 선별하여 사용자 탐색 경험 개선"
+            ], 
+            img: sc_4, 
+            link: null 
+        },
+        { 
+            title: "스크랩마켓 웹뷰 기반 실시간 채팅 및 FCM 구현", 
+            skills: "ReactNative, Django", 
+            description: [
+                "WebView 기반 채팅 화면을 앱에 연동하여 웹-앱 간 리소스 공유 및 배포 효율성 극대화",
                 "Bridge 기술을 활용해 FCM 푸시 알림 수신 등 네이티브 기능과 웹뷰 간 연동 구현",
                 "명함 정보 커스텀 전송 기능을 통한 B2B 거래 상대방 신뢰도 확인 및 사용자 경험 개선"
             ], 
-            img: sc_4, 
-            link: null,
-            companyLogo: ugly
-        },
+            img: sc_5, 
+            link: null 
+        }
+    ];
 
-        // 4. 바른행정(케이비자) 관련 프로젝트
+    const webBarunProjects: Project[] = [
         {
             title: "행정24 플랫폼 구축 [TIPS 과제]",
             skills: "React, Django",
@@ -518,8 +460,17 @@ function Home() {
                 "카카오톡 알림톡 API 연동을 통해 행정사 업무 진행 현황을 의뢰인에게 실시간 푸시 알림 제공",
             ],
             img: k_1,
-            link: null,
-            companyLogo: barun
+            link: null
+        },
+        {
+            title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
+            skills: "React, php",
+            description: [
+                "결혼비자(F-6) 발급 요건 충족 여부를 실시간으로 판별하는 자가 진단(Self-Test) 엔진 설계 및 구축",
+                "상담 전 사전 검증 단계를 도입하여 부적합 상담 문의율을 감소시키고 전문 행정사 업무 효율성 제고",
+            ],
+            img: k_3,
+            link: null
         },
         { 
             title: "대기업 협업 비자 접수 플랫폼 [파트너스]", 
@@ -531,19 +482,7 @@ function Home() {
                 "다수의 채널에서 유입되는 고객 정보를 정확하게 분류하고 관리할 수 있는 백엔드 비즈니스 로직 고도화"
             ], 
             img: k_2, 
-            link: "https://www.fetv.co.kr/news/article.html?no=191348",
-            companyLogo: barun
-        },
-        {
-            title: "결혼비자 셀프테스트 엔진 및 사이트 리뉴얼",
-            skills: "React, php",
-            description: [
-                "결혼비자(F-6) 발급 요건 충족 여부를 실시간으로 판별하는 자가 진단(Self-Test) 엔진 설계 및 구축",
-                "상담 전 사전 검증 단계를 도입하여 부적합 상담 문의율을 감소시키고 전문 행정사 업무 효율성 제고",
-            ],
-            img: k_3,
-            link: null,
-            companyLogo: barun
+            link: "https://www.fetv.co.kr/news/article.html?no=191348" 
         },
         { 
             title: "케이비자 알리미 및 위젯 (App)", 
@@ -554,21 +493,7 @@ function Home() {
                 "Store 배포 및 하이브리드 앱 환경 최적화 수행"
             ], 
             img: k_4, 
-            link: "https://play.google.com/store/apps/details?id=com.kvisaapp",
-            companyLogo: barun
-        },
-        { 
-            title: "통합 관리자(Admin) 시스템 및 대시보드 구축", 
-            skills: "Python, Django, React", 
-            description: [
-                "사업성장파트너·케이비자·행정심판 등 3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상",
-                "일자별 접수 현황 및 업무량 실시간 시각화 대시보드를 통한 데이터 기반 의사결정 지원",
-                "유튜브 API 로컬라이징 로직(썸네일 자동 추출 및 서버 저장)을 구현하여 메인 로딩 속도 최적화",
-                "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현"
-            ], 
-            img: k_8, 
-            link: "",
-            companyLogo: barun
+            link: "https://play.google.com/store/apps/details?id=com.kvisaapp" 
         },
         { 
             title: "행정심판연구소 보안 강의 플랫폼 고도화", 
@@ -579,9 +504,75 @@ function Home() {
                 "고객 후기 관리 시스템 및 PC/모바일 반응형 UI 고도화로 서비스 전환율 개선"
             ], 
             img: k_7, 
-            link: "https://www.hangsim.co.kr",
-            companyLogo: barun
+            link: "https://www.hangsim.co.kr" 
         }, 
+        { 
+            title: "통합 관리자(Admin) 시스템 및 대시보드 구축", 
+            skills: "Python, Django, React", 
+            description: [
+                "사업성장파트너·케이비자·행정심판 등 3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상",
+                "일자별 접수 현황 및 업무량 실시간 시각화 대시보드를 통한 데이터 기반 의사결정 지원",
+                "유튜브 API 로컬라이징 로직(썸네일 자동 추출 및 서버 저장)을 구현하여 메인 로딩 속도 최적화",
+                "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현"
+            ], 
+            img: k_8, 
+            link: "" 
+        },
+    ];
+
+    // ── 자동화 탭 ──────────────────────────────────────────────
+    const autoBarunProjects: Project[] = [
+        { 
+            title: "이커머스 운영 자동화 및 ERP 연동", 
+            skills: "Python, Selenium, Google API", 
+            description: [
+                "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
+                "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
+            ], 
+            img: m_9, 
+            link: null 
+        },
+        { 
+            title: "블로그 자동작성", 
+            skills: "Python, Selenium, Claude API",
+            description: [
+                "Selenium 기반 네이버 등 블로그 플랫폼 포스팅 자동화 봇 구축",
+                "Claude API를 연동하여 키워드 기반 맞춤형 정보성 콘텐츠 자동 생성 로직 구현",
+                "이미지 자동 검색 및 삽입 알고리즘을 통한 포스팅 퀄리티 향상 및 작업 시간 90% 단축",
+            ], 
+            img: k_9,
+            link: blogVideo,
+            isVideo: true 
+        },
+    ];
+
+    // ── AI 탭 ──────────────────────────────────────────────────
+    const aiBarunProjects: Project[] = [
+        { 
+            title: "케이비자 AI & RAG 시스템 개발 [TIPS 과제]", 
+            skills: "Python, Django, OpenAI, Upstage OCR", 
+            description: [
+                "Claude API 및 OpenSearch 기반 RAG 시스템 구축으로 법률 상담 답변의 신뢰성 확보",
+                "Upstage OCR을 활용한 행정 서류 자동 분석 및 맞춤형 서류 작성 가이드 자동화",
+                "Selenium 기반 법령 데이터 스크래핑 파이프라인 구축으로 AI 학습 데이터 수집 자동화",
+                "TossPay 정기 결제 시스템 연동을 통한 유료 구독 모델 수익 구조 마련"
+            ], 
+            img: k_6, 
+            link: ai,
+            isVideo: true 
+        },
+        { 
+            title: "AI 비자 자동분석서비스 구축", 
+            skills: "React, Django, Python, Claude API",
+            description: [
+                "Claude API(LLM)와 내부 행정 데이터를 결합하여 사용자 맞춤형 비자 발급 가능성 예측 모델 구축",
+                "수만 건의 비자 성공/실패 사례 데이터를 컨텍스트로 활용하여 AI 답변의 정확도 및 신뢰성 확보",
+                "복잡한 법률 용어로 구성된 비자 요건을 사용자 친화적인 자연어 피드백으로 변환하여 제공",
+            ], 
+            img: k_10,
+            link: visa_analyze,
+            isVideo: true 
+        },
     ];
 
     const handleToggle = (index: number | null) => {
@@ -695,49 +686,89 @@ function Home() {
                     </div>
 
                     {/* 프로젝트 섹션 */}
-                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" :"100%", margin: "40px 0px 10px", fontSize: "20px" }}>
+                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" :"100%", margin: "40px 0px 20px", fontSize: "20px" }}>
                         <span>💻 </span>
                         <Line>프로젝트</Line>
                     </FlexRowBetweenCenter>
 
-                    {/* 상단 필터 탭 */}
-                    <TabContainer>
-                        <TabButton $isActive={activeTab === 'ai'} onClick={() => setActiveTab('ai')}>
-                            🤖 AI 서비스 ({aiProjects.length})
-                        </TabButton>
-                        <TabButton $isActive={activeTab === 'automation'} onClick={() => setActiveTab('automation')}>
-                            ⚙️ 자동화 시스템 ({automationProjects.length})
-                        </TabButton>
-                        <TabButton $isActive={activeTab === 'webapp'} onClick={() => setActiveTab('webapp')}>
-                            🌐 웹·앱 플랫폼 ({webAppProjects.length})
-                        </TabButton>
+                    {/* 탭 버튼 */}
+                    <TabContainer $windowWidth={windowWidth}>
+                        {(["웹앱", "자동화", "AI"] as ProjectTab[]).map(tab => (
+                            <TabButton
+                                key={tab}
+                                $active={activeTab === tab}
+                                onClick={() => setActiveTab(tab)}
+                            >
+                                {tab}
+                            </TabButton>
+                        ))}
                     </TabContainer>
 
-                    {/* 선택된 탭 컨텐츠 렌더링 */}
+                    {/* 웹앱 탭 */}
                     <AnimatePresence mode="wait">
-                        {activeTab === 'ai' && (
-                            <ProjectGrid 
-                                key="ai-tab"
-                                projects={aiProjects} 
-                                handleProjectClick={handleProjectClick} 
-                                windowWidth={windowWidth}
-                            />
+                        {activeTab === "웹앱" && (
+                            <motion.div
+                                key="웹앱"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.25 }}
+                                style={{ width: "100%" }}
+                            >
+                                <CompanySection>
+                                    <img src={marktet} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="마켓비 로고" />
+                                    <ProjectGrid projects={webMarketBProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+
+                                <CompanySection>
+                                    <img src={zip} style={{ height: windowWidth < 700 ? "22px" :"28px", margin: "0 auto 25px 20px", display: 'block' }} alt="집대장 로고" />
+                                    <ProjectGrid projects={webZipProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+
+                                <CompanySection>
+                                    <img src={ugly} style={{ height: windowWidth < 700 ? "22px" :"28px", margin: "0 auto 25px 20px", display: 'block' }} alt="어글리스톤 로고" />
+                                    <ProjectGrid projects={webScrapProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+
+                                <CompanySection>
+                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" :"28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
+                                    <ProjectGrid projects={webBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+                            </motion.div>
                         )}
-                        {activeTab === 'automation' && (
-                            <ProjectGrid 
-                                key="automation-tab"
-                                projects={automationProjects} 
-                                handleProjectClick={handleProjectClick} 
-                                windowWidth={windowWidth}
-                            />
+
+                        {/* 자동화 탭 */}
+                        {activeTab === "자동화" && (
+                            <motion.div
+                                key="자동화"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.25 }}
+                                style={{ width: "100%" }}
+                            >
+                                <CompanySection>
+                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" :"28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
+                                    <ProjectGrid projects={autoBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+                            </motion.div>
                         )}
-                        {activeTab === 'webapp' && (
-                            <ProjectGrid 
-                                key="webapp-tab"
-                                projects={webAppProjects} 
-                                handleProjectClick={handleProjectClick} 
-                                windowWidth={windowWidth}
-                            />
+
+                        {/* AI 탭 */}
+                        {activeTab === "AI" && (
+                            <motion.div
+                                key="AI"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.25 }}
+                                style={{ width: "100%" }}
+                            >
+                                <CompanySection>
+                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" :"28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
+                                    <ProjectGrid projects={aiBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth}/>
+                                </CompanySection>
+                            </motion.div>
                         )}
                     </AnimatePresence>
 
