@@ -8,6 +8,7 @@ import zip from "../assets/logo/zip.png"
 import ugly from "../assets/logo/uglystone.png"
 import barun from "../assets/logo/barun.webp"
 import main from "../assets/main.jpg"
+
 import m_1 from "../assets/project/m_1.png"
 import m_2 from "../assets/project/m_2.png"
 import m_9 from "../assets/project/m_9.png"
@@ -17,6 +18,7 @@ import sc_2 from "../assets/project/sc_2.jpg"
 import sc_3 from "../assets/project/sc_3.jpg"
 import sc_4 from "../assets/project/sc_4.jpg"
 import sc_5 from "../assets/project/sc_5.jpg"
+
 import k_1 from "../assets/project/k_1.png"
 import k_2 from "../assets/project/k_2.png"
 import k_3 from "../assets/project/k_3.png"
@@ -26,6 +28,10 @@ import k_7 from "../assets/project/k_7.png"
 import k_8 from "../assets/project/k_8.png"
 import k_9 from "../assets/project/k_9.png"
 import k_10 from "../assets/project/k_10.png"
+import k_11 from "../assets/project/k_11.png"
+
+import pr_1 from "../assets/project/pr_1.png"
+
 import blogVideo from "../assets/blog.mov";
 import ai from "../assets/ai.mov"
 import visa_analyze from "../assets/visa_analyze.mp4"
@@ -314,7 +320,7 @@ const ProgressTrack = styled.div`
 const ProgressFill = styled.div`
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #f97316, #ef4444);
+  background: linear-gradient(45deg, #000000, #ef4444);
 
   @keyframes progress-slide {
     0%   { width: 55%; opacity: 0.8; }
@@ -429,13 +435,13 @@ function Home() {
         {
             title: "행정돕다 AI",
             description: "바움행정법인 내부용 AI서비스.",
-            img: no,
+            img: k_11,
             skills: "React, FastApI, Vite , ClaudeAPI",
         },
         {
             title: "한국관광지 AI [한국관광지콘텐츠랩]",
             description: "한국관광지API를 통해 관광지 선택후 경로를 추천해주는 서비스",
-            img: no,
+            img: pr_1,
             skills: "React, FastApI, Vite , ClaudeAPI",
         },
     ];
@@ -818,7 +824,7 @@ function Home() {
                                     <div style={{ position: "absolute", top: "10px", left: "10px" }}>
                                         <OngoingBadge>
                                             <PulseDot />
-                                            IN PROGRESS
+                                            PROGRESS
                                         </OngoingBadge>
                                     </div>
                                 </div>
