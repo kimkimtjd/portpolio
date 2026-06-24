@@ -72,7 +72,7 @@ interface ProjectGridProps {
     windowWidth: number;
 }
 
-type ProjectTab = "웹앱" | "자동화" | "AI";
+type ProjectTab = "마켓비" | "집대장" | "어글리스톤" | "바른행정";
 
 // ── Styled Components ──────────────────────────────────────────
 
@@ -229,29 +229,34 @@ const TabContainer = styled.div<{ $windowWidth: number }>`
   margin-left: ${props => props.$windowWidth < 700 ? "0px" : "20px"};
   margin-bottom: 28px;
   width: ${props => props.$windowWidth < 700 ? "90%" : "100%"};
+  flex-wrap: wrap;
 `;
 
 const TabButton = styled.button<{ $active: boolean }>`
-  padding: 8px 22px;
+  padding: 8px 18px;
   border-radius: 20px;
   border: 2px solid ${props => props.$active ? "#1a1a1a" : "rgb(229 231 235)"};
-  background: ${props => props.$active ? "#1a1a1a" : "white"};
-  color: ${props => props.$active ? "white" : "rgb(75 85 99)"};
-  font-size: 14px;
-  font-weight: ${props => props.$active ? "700" : "500"};
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
 
+  img {
+    height: 16px;
+    transition: filter 0.2s ease;
+  }
+
   &:hover {
     border-color: #1a1a1a;
-    color: ${props => props.$active ? "white" : "#1a1a1a"};
   }
 `;
 
-const CompanySection = styled.div`
-  width: 100%;
-  margin-bottom: 50px;
-`;
+// const CompanySection = styled.div`
+//   width: 100%;
+//   margin-bottom: 50px;
+// `;
 
 // ── 진행 중 프로젝트 Styled Components ────────────────────────
 
@@ -272,29 +277,28 @@ const OngoingBadge = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  color: #c2410c;
+  background: #ffffff;
+  border: 1px solid #000000;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 5px;
   letter-spacing: 0.5px;
 `;
 
-const PulseDot = styled.span`
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ef4444;
+// const PulseDot = styled.span`
+//   display: inline-block;
+//   width: 7px;
+//   height: 7px;
+//   border-radius: 50%;
+//   background: #ef4444;
 
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.4; transform: scale(0.7); }
-  }
-  animation: pulse-dot 1.8s ease-in-out infinite;
-`;
+//   @keyframes pulse-dot {
+//     0%, 100% { opacity: 1; transform: scale(1); }
+//     50%       { opacity: 0.4; transform: scale(0.7); }
+//   }
+//   animation: pulse-dot 1.8s ease-in-out infinite;
+// `;
 
 const ProgressBarWrapper = styled.div`
   margin-top: 12px;
@@ -397,7 +401,7 @@ function Home() {
     const [showVideoModal, setShowVideoModal] = useState<boolean>(false);
     const [videoSource, setVideoSource] = useState<string>("");
     const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
-    const [activeTab, setActiveTab] = useState<ProjectTab>("웹앱");
+    const [activeTab, setActiveTab] = useState<ProjectTab>("마켓비");
 
     useEffect(() => {
         const handleResize = () => {
@@ -409,6 +413,13 @@ function Home() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const tabs: { key: ProjectTab; img: string }[] = [
+        { key: "마켓비",     img: marktet },
+        { key: "집대장",     img: zip     },
+        { key: "어글리스톤", img: ugly    },
+        { key: "바른행정",   img: barun   },
+    ];
 
     const career: CareerItem[] = [
         { job: "바른행정 주식회사", Date: "2024.11 ~", intro: "복잡하고 불투명한 행정 문제를 해결하는 IT기반의 기업", img: barun,
@@ -430,14 +441,7 @@ function Home() {
         { title: "Etc", data: ["Selenium", "Pandas", "openpyxl", "LLM"] },
     ];
 
-    // ── 현재 진행 중인 프로젝트 ────────────────────────────────
     const ongoingProjects: OngoingProject[] = [
-        {
-            title: "행정돕다 AI",
-            description: "바움행정법인 내부용 AI서비스.",
-            img: k_11,
-            skills: "React, FastApI, Vite , ClaudeAPI",
-        },
         {
             title: "한국관광지 AI [한국관광지콘텐츠랩]",
             description: "한국관광지API를 통해 관광지 선택후 경로를 추천해주는 서비스",
@@ -446,8 +450,8 @@ function Home() {
         },
     ];
 
-    // ── 웹앱 탭 ───────────────────────────────────────────────
-    const webMarketBProjects: Project[] = [
+    // ── 마켓비 프로젝트 ───────────────────────────────────────
+    const marketBProjects: Project[] = [
         {
             title: "위탁 관리 자동화 및 전용 웹사이트 구축",
             skills: "Django, Docker, Vue",
@@ -469,9 +473,20 @@ function Home() {
             img: m_2,
             link: null
         },
+        {
+            title: "이커머스 운영 자동화 및 ERP 연동",
+            skills: "Python, Selenium, Google API",
+            description: [
+                "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
+                "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
+            ],
+            img: m_9,
+            link: null
+        },
     ];
 
-    const webZipProjects: Project[] = [
+    // ── 집대장 프로젝트 ───────────────────────────────────────
+    const zipProjects: Project[] = [
         {
             title: "전원주택 특화 매물 정보 플랫폼",
             skills: "Node.js, React, MySQL",
@@ -494,7 +509,8 @@ function Home() {
         }
     ];
 
-    const webScrapProjects: Project[] = [
+    // ── 어글리스톤 프로젝트 ───────────────────────────────────
+    const uglyProjects: Project[] = [
         {
             title: "스크랩마켓 B2B 플랫폼 구축",
             skills: "Django, React, AWS, NaverCloud",
@@ -561,7 +577,8 @@ function Home() {
         }
     ];
 
-    const webBarunProjects: Project[] = [
+    // ── 바른행정 프로젝트 (웹앱 + 자동화 + AI 통합) ──────────
+    const barunProjects: Project[] = [
         {
             title: "행정24 플랫폼 구축 [TIPS 과제]",
             skills: "React, Django",
@@ -629,22 +646,6 @@ function Home() {
             img: k_8,
             link: ""
         },
-    ];
-
-    // ── 자동화 탭 ─────────────────────────────────────────────
-    const autoMarketProjects: Project[] = [
-        {
-            title: "이커머스 운영 자동화 및 ERP 연동",
-            skills: "Python, Selenium, Google API",
-            description: [
-                "Google Sheets API를 활용한 실시간 매출/재고 현황 공유 및 ERP 업무 자동화 시스템 구축",
-                "기획전 타이머 기반 자동 오픈 시스템 및 이벤트 지원자 자동 취합 봇 개발"
-            ],
-            img: m_9,
-            link: null
-        },
-    ];
-    const autoBarunProjects: Project[] = [
         {
             title: "블로그 자동작성",
             skills: "Python, Selenium, Claude API",
@@ -657,10 +658,6 @@ function Home() {
             link: blogVideo,
             isVideo: true
         },
-    ];
-
-    // ── AI 탭 ─────────────────────────────────────────────────
-    const aiBarunProjects: Project[] = [
         {
             title: "케이비자 AI & RAG 시스템 개발 [TIPS 과제]",
             skills: "Python, Django, OpenAI, Upstage OCR",
@@ -685,6 +682,19 @@ function Home() {
             img: k_10,
             link: visa_analyze,
             isVideo: true
+        },
+        {
+            title: "행정돕다 AI",
+            skills: "React, FastApi, Python, Claude API",
+            description: [
+                "Claude API와 내부 행정 데이터를 결합하여 행정 업무에 특화된 맞춤형 AI 모델을 구축",
+                "특정사이트의 크롤링 기능을 참고하여 행정업무소식을 매일 오전 자동으로 추출",
+                "네이버 데이터랩 , 유튜브 Data API , 구글 Ads API를 통해 사이트별 실시간 검색 키워드를 추출하여 검색마케팅 참고 기능을 구축",
+                "내부 행정 데이터를 기반으로 블로그 초안과 유튜브 시나리오를 자동으로 추천 및 생성하는 AI 시스템을 구현",
+                "의뢰인 정보와 행정 업무 입력 시 AI가 맞춤형 상담 분석을 수행하고 필요한 서류를 자동으로 작성",
+            ],
+            img: k_11,
+            link: '',
         },
     ];
 
@@ -811,7 +821,6 @@ function Home() {
                     }}>
                         {ongoingProjects.map((project, index) => (
                             <OngoingCard key={index} $windowWidth={windowWidth}>
-                                {/* 이미지 영역 */}
                                 <div style={{ width: "100%", height: "160px", overflow: "hidden", background: "#f8f9fa", position: "relative" }}>
                                     {project.img === no ? (
                                         <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%)", color: "#aaa", fontSize: "13px", fontWeight: 500, letterSpacing: "1px" }}>
@@ -820,16 +829,13 @@ function Home() {
                                     ) : (
                                         <img src={project.img} alt={project.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                     )}
-                                    {/* IN PROGRESS 배지 */}
                                     <div style={{ position: "absolute", top: "10px", left: "10px" }}>
                                         <OngoingBadge>
-                                            <PulseDot />
+                                            {/* <PulseDot /> */}
                                             PROGRESS
                                         </OngoingBadge>
                                     </div>
                                 </div>
-
-                                {/* 카드 콘텐츠 */}
                                 <div style={{ padding: "16px 18px 18px" }}>
                                     <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#1a1a1a", margin: "0 0 8px" }}>
                                         {project.title}
@@ -844,8 +850,6 @@ function Home() {
                                             </span>
                                         ))}
                                     </div>
-
-                                    {/* 진행률 바 */}
                                     <ProgressBarWrapper>
                                         <ProgressLabel>
                                             <span>진행 중</span>
@@ -866,59 +870,35 @@ function Home() {
                         <Line>Project</Line>
                     </FlexRowBetweenCenter>
 
-                    {/* 탭 버튼 */}
+                    {/* ── 회사별 탭 버튼 ── */}
                     <TabContainer $windowWidth={windowWidth}>
-                        {(["웹앱", "자동화", "AI"] as ProjectTab[]).map(tab => (
-                            <TabButton key={tab} $active={activeTab === tab} onClick={() => setActiveTab(tab)}>
-                                {tab}
+                        {tabs.map(({ key, img }) => (
+                            <TabButton key={key} $active={activeTab === key} onClick={() => setActiveTab(key)}>
+                                <img src={img} alt={key} />
                             </TabButton>
                         ))}
                     </TabContainer>
 
+                    {/* ── 탭별 프로젝트 렌더링 ── */}
                     <AnimatePresence mode="wait">
-                        {/* ── 웹앱 탭 ── */}
-                        {activeTab === "웹앱" && (
-                            <motion.div key="웹앱" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <CompanySection>
-                                    <img src={marktet} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="마켓비 로고" />
-                                    <ProjectGrid projects={webMarketBProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
-                                <CompanySection>
-                                    <img src={zip} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="집대장 로고" />
-                                    <ProjectGrid projects={webZipProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
-                                <CompanySection>
-                                    <img src={ugly} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="어글리스톤 로고" />
-                                    <ProjectGrid projects={webScrapProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
-                                <CompanySection>
-                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
-                                    <ProjectGrid projects={webBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
+                        {activeTab === "마켓비" && (
+                            <motion.div key="마켓비" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
+                                <ProjectGrid projects={marketBProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
-
-                        {/* ── 자동화 탭 ── */}
-                        {activeTab === "자동화" && (
-                            <motion.div key="자동화" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                  <CompanySection>
-                                    <img src={marktet} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
-                                    <ProjectGrid projects={autoMarketProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
-                                <CompanySection>
-                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
-                                    <ProjectGrid projects={autoBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
+                        {activeTab === "집대장" && (
+                            <motion.div key="집대장" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
+                                <ProjectGrid projects={zipProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
-
-                        {/* ── AI 탭 ── */}
-                        {activeTab === "AI" && (
-                            <motion.div key="AI" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <CompanySection>
-                                    <img src={barun} style={{ height: windowWidth < 700 ? "22px" : "28px", margin: "0 auto 25px 20px", display: 'block' }} alt="바른행정 로고" />
-                                    <ProjectGrid projects={aiBarunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
-                                </CompanySection>
+                        {activeTab === "어글리스톤" && (
+                            <motion.div key="어글리스톤" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
+                                <ProjectGrid projects={uglyProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
+                            </motion.div>
+                        )}
+                        {activeTab === "바른행정" && (
+                            <motion.div key="바른행정" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
+                                <ProjectGrid projects={barunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
                     </AnimatePresence>
