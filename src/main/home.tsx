@@ -8,6 +8,7 @@ import zip from "../assets/logo/zip.png"
 import ugly from "../assets/logo/uglystone.png"
 import barun from "../assets/logo/barun.webp"
 import main from "../assets/main.jpg"
+import side from "../assets/logo/SideProject.png"
 
 import m_1 from "../assets/project/m_1.png"
 import m_2 from "../assets/project/m_2.png"
@@ -31,6 +32,7 @@ import k_10 from "../assets/project/k_10.png"
 import k_11 from "../assets/project/k_11.png"
 
 import pr_1 from "../assets/project/pr_1.png"
+import pr_2 from "../assets/project/pr_2.png"
 
 import blogVideo from "../assets/blog.mov";
 import ai from "../assets/ai.mov"
@@ -68,18 +70,20 @@ interface OngoingProject {
 
 interface ProjectGridProps {
     projects: Project[];
-    handleProjectClick: (link: string | null, isVideo?: boolean) => void;
+    onCardClick: (project: Project) => void;
     windowWidth: number;
 }
 
-type ProjectTab = "마켓비" | "집대장" | "어글리스톤" | "바른행정";
+type ProjectTab = "토이" |"마켓비" | "집대장" | "어글리스톤" | "바른행정";
 
 // ── Styled Components ──────────────────────────────────────────
 
+// ── 프로젝트 이미지 그리드 ─────────────────────────────────────
+
 const GridContainer = styled.div<{ $windowWidth: number }>`
   display: ${props => props.$windowWidth < 700 ? "flex" : "grid"};
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
   width: ${props => props.$windowWidth < 700 ? "100%" : "calc(100% - 20px)"};
   margin-left: ${props => props.$windowWidth < 700 ? "0px" : "20px"};
   padding: ${props => props.$windowWidth < 700 ? "0 10px" : "0"};
@@ -87,92 +91,165 @@ const GridContainer = styled.div<{ $windowWidth: number }>`
   align-items: ${props => props.$windowWidth < 700 ? "center" : "stretch"};
 `;
 
-const ProjectCard = styled(motion.div)<{ $isClickable: boolean; $windowWidth: number }>`
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+const ImageCard = styled(motion.div)<{ $windowWidth: number }>`
+  position: relative;
+  border-radius: 10px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  cursor: pointer;
+  background: #f0f0f0;
   width: ${props => props.$windowWidth < 700 ? "100%" : "100%"};
   max-width: ${props => props.$windowWidth < 700 ? "400px" : "none"};
-  cursor: ${props => props.$isClickable ? "pointer" : "default"};
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
+  aspect-ratio: 4 / 3;
 
-  &:hover {
-    ${props => props.$isClickable && `
-      transform: translateY(-8px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      border-color: #e0e0e0;
-    `}
+  &:hover .overlay {
+    opacity: 1;
   }
-`;
 
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  background-color: #f8f9fa;
-`;
-
-const ProjectImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-
-  ${ProjectCard}:hover & {
+  &:hover img {
     transform: scale(1.05);
   }
 `;
 
-const PlaceholderImage = styled.div`
+const CardImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+`;
+
+const CardPlaceholder = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
   color: #888;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 1px;
 `;
 
-const VideoOverlay = styled.div`
+const CardOverlay = styled.div`
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  class: overlay;
+`;
+
+const OverlayTitle = styled.p`
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+`;
+
+const OverlaySkills = styled.p`
+  color: rgba(255,255,255,0.75);
+  font-size: 11px;
+  text-align: center;
+  margin: 0;
+`;
+
+
+
+// ── 팝업 모달 ──────────────────────────────────────────────────
+
+const ModalOverlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9000;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 2.5rem;
-  backdrop-filter: blur(1px);
+  padding: 20px;
+  backdrop-filter: blur(3px);
 `;
 
-const CardContent = styled.div`
-  padding: 20px;
+const ModalBox = styled(motion.div)`
+  background: #fff;
+  border-radius: 16px;
+  width: min(600px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.25);
 `;
 
-const ProjectTitle = styled.h3`
-  font-size: 17px;
+const ModalImageWrap = styled.div`
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 16px 16px 0 0;
+  background: #f0f0f0;
+`;
+
+const ModalImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const ModalBody = styled.div`
+  padding: 24px;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+`;
+
+const ModalTitle = styled.h2`
+  font-size: 18px;
   font-weight: 700;
   color: #1a1a1a;
-  margin: 0 0 10px 0;
   line-height: 1.4;
+  margin: 0;
+`;
+
+const ModalClose = styled.button`
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #e5e7eb;
+    color: #111;
+  }
 `;
 
 const SkillTagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 `;
 
 const SkillTag = styled.span`
@@ -180,7 +257,7 @@ const SkillTag = styled.span`
   color: #475569;
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 8px;
+  padding: 4px 9px;
   border-radius: 6px;
   text-transform: uppercase;
   border: 1px solid #e2e8f0;
@@ -189,15 +266,14 @@ const SkillTag = styled.span`
 const DescriptionList = styled.ul`
   margin: 0;
   padding-left: 18px;
-  margin-bottom: 15px;
-  flex-grow: 1;
+  margin-bottom: 20px;
 `;
 
 const DescriptionItem = styled.li`
   color: #4b5563;
   font-size: 13px;
-  line-height: 1.6;
-  margin-bottom: 4px;
+  line-height: 1.7;
+  margin-bottom: 5px;
   list-style-type: disc;
 
   &::marker {
@@ -205,21 +281,27 @@ const DescriptionItem = styled.li`
   }
 `;
 
-const ActionLink = styled.div<{ $isVideo: boolean }>`
-  text-align: right;
+const ModalActionRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+`;
+
+const ActionButton = styled.button<{ $isVideo?: boolean }>`
   font-size: 13px;
   font-weight: 700;
   color: ${props => props.$isVideo ? "#ef4444" : "#2563eb"};
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 15px;
-  margin-top: auto;
+  background: ${props => props.$isVideo ? "#fef2f2" : "#eff6ff"};
+  border: 1px solid ${props => props.$isVideo ? "#fecaca" : "#bfdbfe"};
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
 
   &:hover {
-    text-decoration: underline;
+    background: ${props => props.$isVideo ? "#fee2e2" : "#dbeafe"};
   }
 `;
 
@@ -253,144 +335,35 @@ const TabButton = styled.button<{ $active: boolean }>`
   }
 `;
 
-// const CompanySection = styled.div`
-//   width: 100%;
-//   margin-bottom: 50px;
-// `;
 
-// ── 진행 중 프로젝트 Styled Components ────────────────────────
 
-const OngoingCard = styled.div<{ $windowWidth: number }>`
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border: 1.5px solid rgb(229 231 235);
-  border-radius: 16px;
-  overflow: hidden;
-  width: ${props => props.$windowWidth < 700 ? "90%" : "calc(50% - 12.5px)"};
-  max-width: ${props => props.$windowWidth < 700 ? "400px" : "none"};
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06);
-  position: relative;
-`;
+// ── ProjectGrid Component (이미지만 노출) ──────────────────────
 
-const OngoingBadge = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffffff;
-  border: 1px solid #000000;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 5px;
-  letter-spacing: 0.5px;
-`;
-
-// const PulseDot = styled.span`
-//   display: inline-block;
-//   width: 7px;
-//   height: 7px;
-//   border-radius: 50%;
-//   background: #ef4444;
-
-//   @keyframes pulse-dot {
-//     0%, 100% { opacity: 1; transform: scale(1); }
-//     50%       { opacity: 0.4; transform: scale(0.7); }
-//   }
-//   animation: pulse-dot 1.8s ease-in-out infinite;
-// `;
-
-const ProgressBarWrapper = styled.div`
-  margin-top: 12px;
-`;
-
-const ProgressLabel = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: rgb(107 114 128);
-  margin-bottom: 5px;
-  font-weight: 600;
-`;
-
-const ProgressTrack = styled.div`
-  width: 100%;
-  height: 5px;
-  background: #f3f4f6;
-  border-radius: 999px;
-  overflow: hidden;
-`;
-
-const ProgressFill = styled.div`
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(45deg, #000000, #ef4444);
-
-  @keyframes progress-slide {
-    0%   { width: 55%; opacity: 0.8; }
-    100% { width: 78%; opacity: 1;   }
-  }
-  animation: progress-slide 2.5s ease-in-out infinite alternate;
-  width: 65%;
-`;
-
-// ── ProjectGrid Component ──────────────────────────────────────
-
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, handleProjectClick, windowWidth }) => (
+const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onCardClick, windowWidth }) => (
     <GridContainer $windowWidth={windowWidth}>
-        {projects.map((project: Project, index: number) => {
-            const skillArray = project.skills.split(',').map(s => s.trim());
-            const isClickable = !!project.link;
+        {projects.map((project: Project, index: number) => (
+            <ImageCard
+                key={index}
+                $windowWidth={windowWidth}
+                onClick={() => onCardClick(project)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.15 }}
+                layout
+            >
+                {project.img === no ? (
+                    <CardPlaceholder>COMING SOON</CardPlaceholder>
+                ) : (
+                    <CardImage src={project.img} alt={project.title} />
+                )}
 
-            return (
-                <ProjectCard
-                    key={index}
-                    $isClickable={isClickable}
-                    $windowWidth={windowWidth}
-                    onClick={() => handleProjectClick(project.link, project.isVideo)}
-                    layout
-                >
-                    <ImageWrapper>
-                        {project.img === no ? (
-                            <PlaceholderImage>COMING SOON</PlaceholderImage>
-                        ) : (
-                            <ProjectImage src={project.img} alt={project.title} />
-                        )}
-                        {project.isVideo && (
-                            <VideoOverlay>
-                                <motion.span
-                                    animate={{ scale: [1, 1.2, 1] }}
-                                    transition={{ repeat: Infinity, duration: 1.5 }}
-                                >
-                                    ▶
-                                </motion.span>
-                            </VideoOverlay>
-                        )}
-                    </ImageWrapper>
+                <CardOverlay className="overlay">
+                    <OverlayTitle>{project.title}</OverlayTitle>
+                    <OverlaySkills>{project.skills}</OverlaySkills>
+                </CardOverlay>
 
-                    <CardContent>
-                        <ProjectTitle>{project.title}</ProjectTitle>
-                        <SkillTagContainer>
-                            {skillArray.map(skill => (
-                                <SkillTag key={skill}>{skill}</SkillTag>
-                            ))}
-                        </SkillTagContainer>
-                        <DescriptionList>
-                            {project.description.map((desc: string, descIndex: number) => (
-                                <DescriptionItem key={descIndex}>
-                                    {desc.replace(/^- /, '')}
-                                </DescriptionItem>
-                            ))}
-                        </DescriptionList>
-                        {project.link && (
-                            <ActionLink $isVideo={!!project.isVideo}>
-                                {project.isVideo ? "▶ 시연 영상 보기" : "자세히 보기 →"}
-                            </ActionLink>
-                        )}
-                    </CardContent>
-                </ProjectCard>
-            );
-        })}
+            </ImageCard>
+        ))}
     </GridContainer>
 );
 
@@ -401,7 +374,10 @@ function Home() {
     const [showVideoModal, setShowVideoModal] = useState<boolean>(false);
     const [videoSource, setVideoSource] = useState<string>("");
     const [windowWidth, setWindowWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
-    const [activeTab, setActiveTab] = useState<ProjectTab>("마켓비");
+    const [activeTab, setActiveTab] = useState<ProjectTab>("토이");
+
+    // 프로젝트 팝업 상태
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -414,7 +390,18 @@ function Home() {
         };
     }, []);
 
+    // 팝업 열릴 때 스크롤 막기
+    useEffect(() => {
+        if (selectedProject) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [selectedProject]);
+
     const tabs: { key: ProjectTab; img: string }[] = [
+        { key: "토이",     img: side },
         { key: "마켓비",     img: marktet },
         { key: "집대장",     img: zip     },
         { key: "어글리스톤", img: ugly    },
@@ -441,12 +428,29 @@ function Home() {
         { title: "Etc", data: ["Selenium", "Pandas", "openpyxl", "LLM"] },
     ];
 
-    const ongoingProjects: OngoingProject[] = [
+    // ── 토이 프로젝트 ───────────────────────────────────────
+    const ToyProjects: Project[] = [
+        {
+            title: "첫걸음",
+            skills: "React, Express ",
+            description: [
+                "대학생(멘토)과 편입생(멘티)의 정보 등록 및 조건 맞춤형 매칭 서비스",
+                "매칭 성공 시 원활한 소통을 지원하기 위한 Socket.io 기반의 실시간 채팅 기능 구현",
+                "Kakao 및 Naver OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현"
+            ],
+            img: pr_2,
+            link: null
+        },
         {
             title: "한국관광지 AI [한국관광지콘텐츠랩]",
-            description: "한국관광지API를 통해 관광지 선택후 경로를 추천해주는 서비스",
+            skills: "React, FastApI, Vite , OpenAI API",
+            description: [
+                "한국관광공사 OpenAPI 표준 데이터를 기반으로 주소지 및 위.경도 정보를 매핑하여 JSON 데이터셋을 고도화하고, 이를 활용한 RAG(검색 증강 생성) 중심의 맞춤형 여행 대화 서비스 구현",
+                "사용자가 선택한 광역시·시군구의 관광지 데이터를 필터링하고, 위도,경도를 활용하여 다중 선택된 목적지 간의 최적 이동 경로를 계산하여 제안하는 추천 기능 구현",
+                "Kakao OAuth 2.0 기반의 간편 로그인 및 사용자 인증 기능 구현"
+            ],
             img: pr_1,
-            skills: "React, FastApI, Vite , ClaudeAPI",
+            link: null
         },
     ];
 
@@ -577,7 +581,7 @@ function Home() {
         }
     ];
 
-    // ── 바른행정 프로젝트 (웹앱 + 자동화 + AI 통합) ──────────
+    // ── 바른행정 프로젝트 ──────────────────────────────────────
     const barunProjects: Project[] = [
         {
             title: "행정24 플랫폼 구축 [TIPS 과제]",
@@ -586,6 +590,7 @@ function Home() {
                 "행정사와 의뢰인을 연결하는 양방향 매칭 플랫폼 설계 및 개발",
                 "설문 기반 클러스터링 알고리즘을 활용한 의뢰인 맞춤형 행정사 추천 기능 구현",
                 "카카오톡 알림톡 API 연동을 통해 행정사 업무 진행 현황을 의뢰인에게 실시간 푸시 알림 제공",
+                "Kakao 및 Naver OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현"
             ],
             img: k_1,
             link: null
@@ -618,7 +623,8 @@ function Home() {
             description: [
                 "비자 만료 기간 자동 감지 및 FCM 알림 발송 시스템 구축으로 사용자 리텐션 강화",
                 "안드로이드 위젯 기능을 개발하여 앱 진입 없이도 실시간 만료 정보 확인 환경 제공",
-                "Store 배포 및 하이브리드 앱 환경 최적화 수행"
+                "Store 배포 및 하이브리드 앱 환경 최적화 수행",
+                "Kakao, Naver, Google 등 OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현", 
             ],
             img: k_4,
             link: "https://play.google.com/store/apps/details?id=com.kvisaapp"
@@ -629,8 +635,8 @@ function Home() {
             description: [
                 "AWS S3 Pre-Signed URL 기술을 적용하여 유료 강의 콘텐츠 무단 복제 방지 보안 체계 구축",
                 "TossPay 결제 모듈 연동 및 사용자 권한별 강의 접근 제어 시스템 구현",
-                "고객 후기 관리 시스템 및 PC/모바일 반응형 UI 고도화로 서비스 전환율 개선"
-            ],
+                "고객 후기 관리 시스템 및 PC/모바일 반응형 UI 고도화로 서비스 전환율 개선",
+                "Kakao, Naver, Google 등 OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현", ],
             img: k_7,
             link: "https://www.hangsim.co.kr"
         },
@@ -665,7 +671,8 @@ function Home() {
                 "Claude API 및 OpenSearch 기반 RAG 시스템 구축으로 법률 상담 답변의 신뢰성 확보",
                 "Upstage OCR을 활용한 행정 서류 자동 분석 및 맞춤형 서류 작성 가이드 자동화",
                 "Selenium 기반 법령 데이터 스크래핑 파이프라인 구축으로 AI 학습 데이터 수집 자동화",
-                "TossPay 정기 결제 시스템 연동을 통한 유료 구독 모델 수익 구조 마련"
+                "TossPay 정기 결제 시스템 연동을 통한 유료 구독 모델 수익 구조 마련",
+                "Kakao, Naver, Google 등 OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현",
             ],
             img: k_6,
             link: ai,
@@ -692,6 +699,7 @@ function Home() {
                 "네이버 데이터랩 , 유튜브 Data API , 구글 Ads API를 통해 사이트별 실시간 검색 키워드를 추출하여 검색마케팅 참고 기능을 구축",
                 "내부 행정 데이터를 기반으로 블로그 초안과 유튜브 시나리오를 자동으로 추천 및 생성하는 AI 시스템을 구현",
                 "의뢰인 정보와 행정 업무 입력 시 AI가 맞춤형 상담 분석을 수행하고 필요한 서류를 자동으로 작성",
+                "Kakao OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현",
             ],
             img: k_11,
             link: '',
@@ -702,7 +710,13 @@ function Home() {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
 
-    const handleProjectClick = (link: string | null, isVideo: boolean = false) => {
+    // 카드 클릭 → 팝업 열기
+    const handleCardClick = (project: Project) => {
+        setSelectedProject(project);
+    };
+
+    // 팝업 내 링크/영상 버튼
+    const handleProjectAction = (link: string | null, isVideo: boolean = false) => {
         if (isVideo && link) {
             setVideoSource(link);
             setShowVideoModal(true);
@@ -805,65 +819,6 @@ function Home() {
                         ))}
                     </div>
 
-                    {/* ── 현재 진행 중인 프로젝트 섹션 ── */}
-                    <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "30px 0px 20px", fontSize: "20px" }}>
-                        <span>🔧 </span>
-                        <Line>Progress</Line>
-                    </FlexRowBetweenCenter>
-                    <div style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "25px",
-                        marginLeft: windowWidth < 700 ? "0px" : "20px",
-                        width: windowWidth < 700 ? "100%" : "calc(100% - 20px)",
-                        padding: windowWidth < 700 ? "0 10px" : "0",
-                        justifyContent: windowWidth < 700 ? "center" : "flex-start",
-                    }}>
-                        {ongoingProjects.map((project, index) => (
-                            <OngoingCard key={index} $windowWidth={windowWidth}>
-                                <div style={{ width: "100%", height: "160px", overflow: "hidden", background: "#f8f9fa", position: "relative" }}>
-                                    {project.img === no ? (
-                                        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%)", color: "#aaa", fontSize: "13px", fontWeight: 500, letterSpacing: "1px" }}>
-                                            COMING SOON
-                                        </div>
-                                    ) : (
-                                        <img src={project.img} alt={project.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                    )}
-                                    <div style={{ position: "absolute", top: "10px", left: "10px" }}>
-                                        <OngoingBadge>
-                                            {/* <PulseDot /> */}
-                                            PROGRESS
-                                        </OngoingBadge>
-                                    </div>
-                                </div>
-                                <div style={{ padding: "16px 18px 18px" }}>
-                                    <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#1a1a1a", margin: "0 0 8px" }}>
-                                        {project.title}
-                                    </h3>
-                                    <p style={{ fontSize: "13px", color: "#6b7280", margin: "0 0 10px", lineHeight: 1.6 }}>
-                                        {project.description}
-                                    </p>
-                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginBottom: "4px" }}>
-                                        {project.skills.split(',').map(s => s.trim()).map((skill, i) => (
-                                            <span key={i} style={{ background: "#f1f5f9", color: "#475569", fontSize: "11px", fontWeight: 600, padding: "3px 8px", borderRadius: "6px", border: "1px solid #e2e8f0", textTransform: "uppercase" }}>
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <ProgressBarWrapper>
-                                        <ProgressLabel>
-                                            <span>진행 중</span>
-                                            <span style={{ color: "#f97316" }}>···</span>
-                                        </ProgressLabel>
-                                        <ProgressTrack>
-                                            <ProgressFill />
-                                        </ProgressTrack>
-                                    </ProgressBarWrapper>
-                                </div>
-                            </OngoingCard>
-                        ))}
-                    </div>
-
                     {/* ── 프로젝트 섹션 ── */}
                     <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "40px 0px 20px", fontSize: "20px" }}>
                         <span>💻 </span>
@@ -879,26 +834,31 @@ function Home() {
                         ))}
                     </TabContainer>
 
-                    {/* ── 탭별 프로젝트 렌더링 ── */}
+                    {/* ── 탭별 프로젝트 렌더링 (이미지 그리드) ── */}
                     <AnimatePresence mode="wait">
+                        {activeTab === "토이" && (
+                            <motion.div key="토이" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
+                                <ProjectGrid projects={ToyProjects} onCardClick={handleCardClick} windowWidth={windowWidth} />
+                            </motion.div>
+                        )}
                         {activeTab === "마켓비" && (
                             <motion.div key="마켓비" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <ProjectGrid projects={marketBProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
+                                <ProjectGrid projects={marketBProjects} onCardClick={handleCardClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
                         {activeTab === "집대장" && (
                             <motion.div key="집대장" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <ProjectGrid projects={zipProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
+                                <ProjectGrid projects={zipProjects} onCardClick={handleCardClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
                         {activeTab === "어글리스톤" && (
                             <motion.div key="어글리스톤" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <ProjectGrid projects={uglyProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
+                                <ProjectGrid projects={uglyProjects} onCardClick={handleCardClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
                         {activeTab === "바른행정" && (
                             <motion.div key="바른행정" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }} style={{ width: "100%" }}>
-                                <ProjectGrid projects={barunProjects} handleProjectClick={handleProjectClick} windowWidth={windowWidth} />
+                                <ProjectGrid projects={barunProjects} onCardClick={handleCardClick} windowWidth={windowWidth} />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -906,6 +866,67 @@ function Home() {
                 </FlexColumnStartStart>
             </FlexColumnStartCenter>
 
+            {/* ── 프로젝트 상세 팝업 ── */}
+            <AnimatePresence>
+                {selectedProject && (
+                    <ModalOverlay
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedProject(null)}
+                    >
+                        <ModalBox
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <ModalImageWrap>
+                                {selectedProject.img === no ? (
+                                    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%)", color: "#888", fontSize: "14px", fontWeight: 500, letterSpacing: "1px" }}>
+                                        COMING SOON
+                                    </div>
+                                ) : (
+                                    <ModalImage src={selectedProject.img} alt={selectedProject.title} />
+                                )}
+                            </ModalImageWrap>
+
+                            <ModalBody>
+                                <ModalHeader>
+                                    <ModalTitle>{selectedProject.title}</ModalTitle>
+                                    <ModalClose onClick={() => setSelectedProject(null)}>×</ModalClose>
+                                </ModalHeader>
+
+                                <SkillTagContainer>
+                                    {selectedProject.skills.split(',').map(s => s.trim()).map((skill, i) => (
+                                        <SkillTag key={i}>{skill}</SkillTag>
+                                    ))}
+                                </SkillTagContainer>
+
+                                <DescriptionList>
+                                    {selectedProject.description.map((desc, i) => (
+                                        <DescriptionItem key={i}>{desc.replace(/^- /, '')}</DescriptionItem>
+                                    ))}
+                                </DescriptionList>
+
+                                {selectedProject.link && (
+                                    <ModalActionRow>
+                                        <ActionButton
+                                            $isVideo={!!selectedProject.isVideo}
+                                            onClick={() => handleProjectAction(selectedProject.link, selectedProject.isVideo)}
+                                        >
+                                            {selectedProject.isVideo ? "▶ 영상 보기" : "자세히 보기 →"}
+                                        </ActionButton>
+                                    </ModalActionRow>
+                                )}
+                            </ModalBody>
+                        </ModalBox>
+                    </ModalOverlay>
+                )}
+            </AnimatePresence>
+
+            {/* ── 영상 모달 ── */}
             <AnimatePresence>
                 {showVideoModal && <VideoModal />}
             </AnimatePresence>
