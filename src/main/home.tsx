@@ -6,7 +6,7 @@ import SidaBar from "../assets/common/sidebar_back.png";
 import marktet from "../assets/logo/marketb.png"
 import zip from "../assets/logo/zip.png"
 import ugly from "../assets/logo/uglystone.png"
-import barun from "../assets/logo/barun.webp"
+import barun from "../assets/logo/k-visa.png"
 import main from "../assets/main.jpg"
 import side from "../assets/logo/SideProject.png"
 
@@ -61,12 +61,7 @@ interface StackItem {
     data: string[];
 }
 
-interface OngoingProject {
-    title: string;
-    description: string;
-    img: string;
-    skills: string;
-}
+
 
 interface ProjectGridProps {
     projects: Project[];
