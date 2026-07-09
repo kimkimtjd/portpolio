@@ -6,7 +6,7 @@ import SidaBar from "../assets/common/sidebar_back.png";
 import marktet from "../assets/logo/marketb.png"
 import zip from "../assets/logo/zip.png"
 import ugly from "../assets/logo/uglystone.png"
-import barun from "../assets/logo/k-visa.png"
+import barun from "../assets/logo/barun.webp"
 import main from "../assets/main.jpg"
 import side from "../assets/logo/SideProject.png"
 
@@ -46,6 +46,7 @@ interface Project {
     img: string;
     link: string | null;
     isVideo?: boolean;
+    impact?: string;
 }
 
 interface CareerItem {
@@ -61,7 +62,12 @@ interface StackItem {
     data: string[];
 }
 
-
+// interface OngoingProject {
+//     title: string;
+//     description: string;
+//     img: string;
+//     skills: string;
+// }
 
 interface ProjectGridProps {
     projects: Project[];
@@ -157,7 +163,30 @@ const OverlaySkills = styled.p`
   margin: 0;
 `;
 
+// ── 프로젝트 성과 배지 (모달 내부) ───────────────────────────────
 
+const ImpactBox = styled.div`
+  border-left: 2px solid #1a1a1a;
+  padding: 2px 0 2px 12px;
+  margin-bottom: 18px;
+`;
+
+const ImpactLabel = styled.div`
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+`;
+
+const ImpactText = styled.p`
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0;
+`;
 
 // ── 팝업 모달 ──────────────────────────────────────────────────
 
@@ -460,7 +489,8 @@ function Home() {
                 "대규모 데이터 이전 시 백업 및 정합성 검증 프로세스 리딩으로 무결성 확보"
             ],
             img: m_1,
-            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954"
+            link: "https://www.getnews.co.kr/news/articleView.html?idxno=510954",
+            impact: "Docker 컨테이너화로 팀 내 버전 충돌 이슈 100% 해결, 24시간 무중단 정산 자동화 달성"
         },
         {
             title: "대리점 안내 및 길찾기 서비스",
@@ -520,7 +550,8 @@ function Home() {
                 "채팅, 경매, 지도 기반 거래 매칭 등 비즈니스 핵심 기능 개발"
             ],
             img: sc_1,
-            link: null
+            link: null,
+            impact: "메인(AWS)·채팅(NaverCloud) 서버 이원화 설계로 대규모 트래픽 상황에서도 안정적인 B2B 거래 플랫폼 운영"
         },
         {
             title: "스크랩마켓 앱 구현",
@@ -531,7 +562,8 @@ function Home() {
                 "DeepLink 네비게이션 설계를 통해 특정 서비스 접근성 향상 및 사용자 재방문 지표 개선"
             ],
             img: ugly,
-            link: null
+            link: null,
+            impact: "실시간 시세, 매물 지도, 채팅·FCM 등 6종 핵심 기능을 웹뷰 기반으로 통합해 웹-앱 리소스 공유 및 배포 효율 극대화"
         },
         {
             title: "리사이클재료 실시간 시세 위젯 구현",
@@ -588,7 +620,8 @@ function Home() {
                 "Kakao 및 Naver OAuth 2.0 기반의 다중 소셜 로그인 및 사용자 인증 기능 구현"
             ],
             img: k_1,
-            link: null
+            link: null,
+            impact: "정부 TIPS 과제로 선정, 설문 기반 클러스터링 알고리즘으로 맞춤형 행정사 매칭 구현"
         },
         {
             title: "결혼비자 셀프테스트 구축 및 사이트 리뉴얼등 다양한 기능을 개발",
@@ -610,7 +643,8 @@ function Home() {
                 "다수의 채널에서 유입되는 고객 정보를 정확하게 분류하고 관리할 수 있는 백엔드 비즈니스 로직 고도화"
             ],
             img: k_2,
-            link: "https://www.fetv.co.kr/news/article.html?no=191348"
+            link: "https://www.fetv.co.kr/news/article.html?no=191348",
+            impact: "전북은행(브라보코리아), LG U+, CU 등 대기업 3곳과 협업해 전용 비자 접수 플랫폼 구축"
         },
         {
             title: "케이비자 알리미 및 위젯 (App)",
@@ -645,7 +679,8 @@ function Home() {
                 "고객별 동영상 재생 시간 추적 및 결제 상태(계좌이체/카드) 통합 관리 시스템 구현"
             ],
             img: k_8,
-            link: ""
+            link: "",
+            impact: "3개 서비스 통합 어드민 구축으로 운영 관리 효율 200% 향상"
         },
         {
             title: "블로그 자동작성",
@@ -657,7 +692,8 @@ function Home() {
             ],
             img: k_9,
             link: blogVideo,
-            isVideo: true
+            isVideo: true,
+            impact: "이미지 자동 검색·삽입 알고리즘 적용으로 포스팅 작업 시간 90% 단축"
         },
         {
             title: "케이비자 AI & RAG 시스템 개발 [TIPS 과제]",
@@ -671,10 +707,11 @@ function Home() {
             ],
             img: k_6,
             link: ai,
-            isVideo: true
+            isVideo: true,
+            impact: "정부 TIPS 과제로 선정, Claude API·OpenSearch 기반 RAG 시스템으로 법률 상담 답변 신뢰성 확보"
         },
         {
-            title: "AI 비자 자동분석서비스 구축",
+            title: "비자 자동분석서비스 구축",
             skills: "React, Django, Python, Claude API",
             description: [
                 "Claude API(LLM)와 내부 행정 데이터를 결합하여 사용자 맞춤형 비자 발급 가능성 예측 모델 구축",
@@ -764,7 +801,6 @@ function Home() {
 
                     {/* ── 경력 섹션 ── */}
                     <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "30px 0px", fontSize: "20px" }}>
-                        <span>🚀 </span>
                         <Line>경력</Line>
                     </FlexRowBetweenCenter>
                     {career.map((item, index) => (
@@ -796,8 +832,7 @@ function Home() {
 
                     {/* ── 스택 섹션 ── */}
                     <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "30px 0px", fontSize: "20px" }}>
-                        <span>🛠️ </span>
-                        <Line>Stack</Line>
+                        <Line>기술 스택</Line>
                     </FlexRowBetweenCenter>
                     <div style={{ display: windowWidth < 700 ? "flex" : "grid", gridTemplateColumns: "repeat(2, 1fr)", marginLeft: windowWidth < 700 ? "0px" : "20px", gap: "10px", width: windowWidth < 700 ? "90%" : "100%", justifyContent: windowWidth < 700 ? "center" : "", alignItems: windowWidth < 700 ? "center" : "", flexDirection: windowWidth < 700 ? "column" : "row" }}>
                         {stack.map((item, index) => (
@@ -816,8 +851,7 @@ function Home() {
 
                     {/* ── 프로젝트 섹션 ── */}
                     <FlexRowBetweenCenter style={{ width: windowWidth < 700 ? "95%" : "100%", margin: "40px 0px 20px", fontSize: "20px" }}>
-                        <span>💻 </span>
-                        <Line>Project</Line>
+                        <Line>프로젝트</Line>
                     </FlexRowBetweenCenter>
 
                     {/* ── 회사별 탭 버튼 ── */}
@@ -899,6 +933,13 @@ function Home() {
                                     ))}
                                 </SkillTagContainer>
 
+                                {selectedProject.impact && (
+                                    <ImpactBox>
+                                        <ImpactLabel>성과</ImpactLabel>
+                                        <ImpactText>{selectedProject.impact}</ImpactText>
+                                    </ImpactBox>
+                                )}
+
                                 <DescriptionList>
                                     {selectedProject.description.map((desc, i) => (
                                         <DescriptionItem key={i}>{desc.replace(/^- /, '')}</DescriptionItem>
@@ -950,5 +991,5 @@ const CloseButton = styled.button`
   &:hover { background: rgba(255, 255, 255, 0.5); }
 `;
 const Line = styled.div`
-  background: #f0f0f0; width: 95%; font-weight: bold;
+  font-weight: 700;
 `;
